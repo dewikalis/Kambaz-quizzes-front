@@ -1,6 +1,7 @@
 export default function Lab1() {
   return (
     <div id="wd-lab1">
+      <h2>Amanda Lee</h2>
       <h2>Lab 1</h2>
       <h3>HTML Examples</h3>
       <div id="wd-h-tag">
@@ -314,7 +315,7 @@ export default function Lab1() {
         </a>
         {""} to get dummy text
       </p>
-      <a href="https://github.com/aamaanda/kanbas-react-web-app" id="wd-github">
+      <a href="https://github.com/aamaanda/kambaz-react-web-app" id="wd-github">
         Click here
       </a>
       {""} for my GitHub
