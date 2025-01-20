@@ -55,64 +55,47 @@ export default function AssignmentEditor() {
           </td>
         </tr>
         <tr>
-          <td>
-            <label>Online Entry Options</label>
-          </td>
-        </tr>
-        <tr>
           <td align="right" valign="top">
-            <input
-              type="checkbox"
-              name="check-entry-option"
-              id="wd-text-entry"
-            />
-            <label htmlFor="wd-text-entry">Text Entry</label>
+            <label htmlFor="wd-group"> Online Entry Options</label>
           </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td align="right" valign="top">
-            <input
-              type="checkbox"
-              name="check-entry-option"
-              id="wd-website-url"
-            />
-            <label htmlFor="wd-website-url">Website URL</label>
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td align="right" valign="top">
-            <input
-              type="checkbox"
-              name="check-entry-option"
-              id="wd-media-recordings"
-            />
-            <label htmlFor="wd-media-recordings">Media Recordings</label>
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td align="right" valign="top">
-            <input
-              type="checkbox"
-              name="check-entry-option"
-              id="wd-student-annotation"
-            />
-            <label htmlFor="wd-student-annotation">Student Annotation</label>
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td align="right" valign="top">
-            <input
-              type="checkbox"
-              name="check-entry-option"
-              id="wd-file-uploads"
-            />
-            <label htmlFor="wd-file-uploads">File Uploads</label>
-          </td>
-          <td></td>
+          <input type="checkbox" name="check-entry-option" id="wd-text-entry" />
+          <label htmlFor="wd-text-entry">Text Entry</label>
+          <br />
+          <input
+            type="checkbox"
+            name="check-entry-option"
+            id="wd-website-url"
+          />
+          <label htmlFor="wd-website-url">Website URL</label>
+          <br />
+          <input
+            type="checkbox"
+            name="check-entry-option"
+            id="wd-media-recordings"
+          />
+          <label htmlFor="wd-media-recordings">Media Recordings</label>
+          <br />
+          <input
+            type="checkbox"
+            name="check-entry-option"
+            id="wd-media-recordings"
+          />
+          <label htmlFor="wd-media-recordings">Media Recordings</label>
+          <br />
+          <input
+            type="checkbox"
+            name="check-entry-option"
+            id="wd-student-annotation"
+          />
+          <label htmlFor="wd-student-annotation">Student Annotation</label>
+          <br />
+          <input
+            type="checkbox"
+            name="check-entry-option"
+            id="wd-file-uploads"
+          />
+          <label htmlFor="wd-file-uploads">File Uploads</label>
+          <br />
         </tr>
         <tr>
           <td align="right" valign="top">
@@ -137,8 +120,6 @@ export default function AssignmentEditor() {
           <td>
             <input type="date" value="2024-05-06" id="wd-available-from" />
           </td>
-        </tr>
-        <tr>
           <td align="right" valign="top">
             <label htmlFor="wd-available-until"> Until</label>
           </td>
