@@ -1,0 +1,16 @@
+.wd-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.wd-search-bar {
+  width: 60%;
+  max-width: 350px;
+}
+
+.wd-buttons {
+  display: flex;
+  gap: 10px;
+}
