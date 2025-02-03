@@ -40,15 +40,16 @@ export default function Modules() {
           <div className="wd-title p-3 ps-2 bg-secondary">
             {" "}
             <BsGripVertical className="me-2 fs-3" /> Week 2{" "}
+            <ModuleControlButtons />
           </div>
           <ListGroup className="wd-lessons rounded-0">
             <ListGroup.Item className="wd-lesson p-3 ps-1">
               <BsGripVertical className="me-2 fs-3" />
-              LESSON 1{" "}
+              LESSON 1 <LessonControlButtons />
             </ListGroup.Item>
             <ListGroup.Item className="wd-lesson p-3 ps-1">
               <BsGripVertical className="me-2 fs-3" />
-              LESSON 2{" "}
+              LESSON 2 <LessonControlButtons />
             </ListGroup.Item>
           </ListGroup>
         </ListGroup.Item>

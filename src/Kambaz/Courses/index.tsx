@@ -13,18 +13,19 @@ export default function Courses() {
       </h2>
       <hr />
       <div className="d-flex">
-        <div className="d-none d-md-block"></div>
-        <CourseNavigation />
-      </div>
-      <div className="flex-fill">
-        <Routes>
-          <Route path="/" element={<Navigate to="Home" />} />
-          <Route path="Home" element={<Home />} />
-          <Route path="Modules" element={<Modules />} />
-          <Route path="Assignments" element={<Assignments />} />
-          <Route path="Assignments/:aid" element={<AssignmentEditor />} />
-          <Route path="People" element={<h2>People</h2>} />
-        </Routes>
+        <div className="d-none d-md-block">
+          <CourseNavigation />
+        </div>
+        <div className="flex-fill">
+          <Routes>
+            <Route path="/" element={<Navigate to="Home" />} />
+            <Route path="Home" element={<Home />} />
+            <Route path="Modules" element={<Modules />} />
+            <Route path="Assignments" element={<Assignments />} />
+            <Route path="Assignments/:aid" element={<AssignmentEditor />} />
+            <Route path="People" element={<h2>People</h2>} />
+          </Routes>
+        </div>
       </div>
     </div>
   );

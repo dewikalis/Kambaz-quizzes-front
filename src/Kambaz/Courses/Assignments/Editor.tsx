@@ -122,55 +122,76 @@ export default function AssignmentEditor() {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label style={{ marginBottom: "10px" }}>Assign</Form.Label>
+          <div className="d-flex align-items-start">
+            <Form.Label
+              className="me-3"
+              style={{ marginBottom: "10px", width: "150px" }}
+            >
+              Assign
+            </Form.Label>
 
-          <div className="border p-3 rounded">
-            <div className="mb-3">
-              <Form.Label className="fw-bold" style={{ marginBottom: "10px" }}>
-                Assign to
-              </Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Everyone"
-                title="Everyone"
-                id="wd-assign-to"
-              />
-            </div>
+            <div className="border p-3 rounded" style={{ flex: 1 }}>
+              <div className="mb-3">
+                <Form.Label
+                  className="fw-bold"
+                  style={{ marginBottom: "10px" }}
+                >
+                  Assign to
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Everyone"
+                  title="Everyone"
+                  id="wd-assign-to"
+                />
+              </div>
 
-            <div className="mb-3">
-              <Form.Label className="fw-bold" style={{ marginBottom: "10px" }}>
-                Due
-              </Form.Label>
-              <Form.Control
-                type="date"
-                id="wd-date"
-                placeholder="mm-dd-yyyy"
-                className="mb-2"
-              />
-            </div>
+              <div className="mb-3">
+                <Form.Label
+                  className="fw-bold"
+                  style={{ marginBottom: "10px" }}
+                >
+                  Due
+                </Form.Label>
+                <Form.Control
+                  type="date"
+                  id="wd-date"
+                  placeholder="mm-dd-yyyy"
+                  className="mb-2"
+                />
+              </div>
 
-            <div className="mb-3">
-              <Form.Label className="fw-bold" style={{ marginBottom: "10px" }}>
-                Available from
-              </Form.Label>
-              <Form.Control
-                type="date"
-                id="wd-date"
-                placeholder="mm-dd-yyyy"
-                className="mb-2"
-              />
-            </div>
+              <div className="d-flex">
+                <div className="mb-3 me-3" style={{ flex: 1 }}>
+                  <Form.Label
+                    className="fw-bold"
+                    style={{ marginBottom: "10px" }}
+                  >
+                    Available from
+                  </Form.Label>
+                  <Form.Control
+                    type="date"
+                    id="wd-date"
+                    placeholder="mm-dd-yyyy"
+                    className="mb-2"
+                  />
+                </div>
 
-            <div className="mb-3">
-              <Form.Label className="fw-bold" style={{ marginBottom: "10px" }}>
-                Until
-              </Form.Label>
-              <Form.Control
-                type="date"
-                id="wd-date"
-                placeholder="mm-dd-yyyy"
-                className="mb-2"
-              />
+                <div className="mb-3" style={{ flex: 1 }}>
+                  <Form.Label
+                    className="fw-bold"
+                    style={{ marginBottom: "10px" }}
+                  >
+                    Until
+                  </Form.Label>
+                  <Form.Control
+                    type="date"
+                    id="wd-date"
+                    placeholder="mm-dd-yyyy"
+                    className="mb-2"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </Form.Group>

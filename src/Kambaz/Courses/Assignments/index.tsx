@@ -42,9 +42,13 @@ export default function Assignments() {
                 A1
               </a>
               <span className="d-block">
-                Multiple Modules | Not available until May 6 at 12:00am |
+                <span style={{ color: "#DC3545" }}>Multiple Modules</span> |{" "}
+                <b>Not available until </b> May 6 at 12:00am |
               </span>
-              <span className="d-block">Due May 13 at 11:59pm | 100pts</span>
+              <span className="d-block">
+                {" "}
+                <b>Due </b> May 13 at 11:59pm | 100pts{" "}
+              </span>
             </div>
 
             <div className="ms-auto">
@@ -65,9 +69,13 @@ export default function Assignments() {
                 A2
               </a>
               <span className="d-block">
-                Multiple Modules | Not available until May 13 at 12:00am |
+                <span style={{ color: "#DC3545" }}>Multiple Modules</span> |{" "}
+                <b>Not available until </b> May 13 at 12:00am |
               </span>
-              <span className="d-block">Due May 20 at 11:59pm | 100pts</span>
+              <span className="d-block">
+                {" "}
+                <b>Due </b> May 20 at 11:59pm | 100pts{" "}
+              </span>
             </div>
 
             <div className="ms-auto">
@@ -88,9 +96,13 @@ export default function Assignments() {
                 A3
               </a>
               <span className="d-block">
-                Multiple Modules | Not available until May 20 at 12:00am |
+                <span style={{ color: "#DC3545" }}>Multiple Modules</span> |{" "}
+                <b>Not available until </b> May 20 at 12:00am |
               </span>
-              <span className="d-block">Due May 27 at 11:59pm | 100pts</span>
+              <span className="d-block">
+                {" "}
+                <b>Due </b> May 27 at 11:59pm | 100pts{" "}
+              </span>
             </div>
 
             <div className="ms-auto">
