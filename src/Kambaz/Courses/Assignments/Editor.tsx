@@ -1,7 +1,4 @@
 import { Button, Form } from "react-bootstrap";
-import { FaChalkboardTeacher, FaChevronDown, FaDesktop } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import Select from "react-select";
 
 export default function AssignmentEditor() {
   return (
