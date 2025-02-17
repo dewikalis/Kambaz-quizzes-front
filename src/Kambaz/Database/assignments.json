@@ -1,0 +1,83 @@
+[
+  {
+    "_id": "A101",
+    "title": "Propulsion Assignment",
+    "course": "RS101",
+    "description": "The assignment is about propulsion mechanisms.",
+    "points": 100,
+    "dueDate": "2025-02-20",
+    "availableDate": "2025-02-05"
+  },
+  {
+    "_id": "A102",
+    "title": "Combustion Analysis",
+    "course": "RS101",
+    "description": "This assignment covers combustion analysis techniques.",
+    "points": 90,
+    "dueDate": "2025-02-25",
+    "availableDate": "2025-02-10"
+  },
+  {
+    "_id": "A103",
+    "title": "Nozzle Design Project",
+    "course": "RS101",
+    "description": "Focuses on the design of propulsion nozzles.",
+    "points": 80,
+    "dueDate": "2025-03-01",
+    "availableDate": "2025-02-15"
+  },
+  {
+    "_id": "A201",
+    "title": "Aerodynamics Quiz",
+    "course": "RS102",
+    "description": "A quiz on fundamental aerodynamics concepts.",
+    "points": 50,
+    "dueDate": "2025-02-28",
+    "availableDate": "2025-02-10"
+  },
+  {
+    "_id": "A202",
+    "title": "Flow Analysis",
+    "course": "RS102",
+    "description": "Involves analysis of airflow over different surfaces.",
+    "points": 70,
+    "dueDate": "2025-03-05",
+    "availableDate": "2025-02-12"
+  },
+  {
+    "_id": "A203",
+    "title": "Heating Analysis",
+    "course": "RS102",
+    "description": "Analysis of heating in various materials during fluid flow.",
+    "points": 60,
+    "dueDate": "2025-03-10",
+    "availableDate": "2025-02-18"
+  },
+  {
+    "_id": "A301",
+    "title": "Structural Design Task",
+    "course": "RS103",
+    "description": "Designing a structural component under specific load conditions.",
+    "points": 100,
+    "dueDate": "2025-03-15",
+    "availableDate": "2025-02-20"
+  },
+  {
+    "_id": "A302",
+    "title": "Orbital Calculations",
+    "course": "RS103",
+    "description": "Calculations related to orbital mechanics and satellite trajectories.",
+    "points": 90,
+    "dueDate": "2025-03-20",
+    "availableDate": "2025-02-25"
+  },
+  {
+    "_id": "A303",
+    "title": "Systems Engineering Exam",
+    "course": "RS103",
+    "description": "Comprehensive exam covering systems engineering topics.",
+    "points": 120,
+    "dueDate": "2025-03-25",
+    "availableDate": "2025-03-01"
+  }
+]

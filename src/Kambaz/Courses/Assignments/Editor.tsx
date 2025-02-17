@@ -1,20 +1,29 @@
 import { Button, Form } from "react-bootstrap";
+import { useParams, Link } from "react-router-dom";
+import * as db from "../../Database";
 
 export default function AssignmentEditor() {
+  const { cid, aid } = useParams();
+  const assignment = db.assignments.find(
+    (assignment) => assignment._id === aid
+  );
+
+  if (!assignment) {
+    return <div>Assignment not found.</div>;
+  }
+
+  const { title, description, points, dueDate, availableDate } = assignment;
+
   return (
     <div id="wd-assignments-editor" className="p-4">
       <Form>
         <Form.Group className="mb-3" controlId="wd-name">
           <Form.Label>Assignment Name</Form.Label>
-          <Form.Control type="text" defaultValue="A1" />
+          <Form.Control type="text" defaultValue={title} />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="wd-description">
-          <Form.Control
-            as="textarea"
-            rows={3}
-            defaultValue="The assignment is available online Submit a link to the landing page of"
-          />
+          <Form.Control as="textarea" rows={3} defaultValue={description} />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="wd-points">
@@ -24,98 +33,32 @@ export default function AssignmentEditor() {
             </Form.Label>
             <Form.Control
               type="number"
-              defaultValue={100}
+              defaultValue={points}
               style={{ flex: 1 }}
             />
           </div>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="wd-assign-group">
-          <div className="d-flex align-items-center">
-            <Form.Label className="me-3" style={{ width: "150px" }}>
-              Assignment Group
-            </Form.Label>
-            <Form.Control
-              as="select"
-              defaultValue="ASSIGNMENT3"
-              style={{ flex: 1 }}
-            >
-              <option value="ASSIGNMENT1">Assignment1</option>
-              <option value="ASSIGNMENT2">Assignment2</option>
-              <option value="ASSIGNMENT3">Assignment3</option>
-            </Form.Control>
-          </div>
+        <Form.Group className="mb-3 d-flex align-items-center">
+          <Form.Label className="me-3" style={{ width: "150px" }}>
+            Due Date
+          </Form.Label>
+          <Form.Control
+            type="date"
+            defaultValue={dueDate}
+            style={{ flex: 1 }}
+          />
         </Form.Group>
 
         <Form.Group className="mb-3 d-flex align-items-center">
           <Form.Label className="me-3" style={{ width: "150px" }}>
-            Display Grade as
+            Available From
           </Form.Label>
           <Form.Control
-            as="select"
-            defaultValue="PERCENTAGE"
+            type="date"
+            defaultValue={availableDate}
             style={{ flex: 1 }}
-          >
-            <option value="PERCENTAGE">Percentage</option>
-            <option value="NUMBER">Number</option>
-          </Form.Control>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="wd-assign-group">
-          <div className="d-flex align-items-start">
-            <Form.Label className="me-3" style={{ width: "150px" }}>
-              Submission Type
-            </Form.Label>
-
-            <div className="border p-3 rounded" style={{ flex: 1 }}>
-              <Form.Select defaultValue="ONLINE" style={{ flex: 1 }}>
-                <option value="ONLINE">Online</option>
-                <option value="INPERSON">In Person</option>
-              </Form.Select>
-
-              <div className="mt-3">
-                <b style={{ display: "block", marginBottom: "10px" }}>
-                  {" "}
-                  Online Entry Option{" "}
-                </b>
-                <div className="mb-3">
-                  <Form.Check
-                    type="checkbox"
-                    id="checkbox1"
-                    label="Text Entry"
-                  />
-                </div>
-                <div className="mb-3">
-                  <Form.Check
-                    type="checkbox"
-                    id="checkbox2"
-                    label="Website URL"
-                  />
-                </div>
-                <div className="mb-3">
-                  <Form.Check
-                    type="checkbox"
-                    id="checkbox3"
-                    label="Media Recordings"
-                  />
-                </div>
-                <div className="mb-3">
-                  <Form.Check
-                    type="checkbox"
-                    id="checkbox3"
-                    label="Student Annotation"
-                  />
-                </div>
-                <div className="mb-3">
-                  <Form.Check
-                    type="checkbox"
-                    id="checkbox3"
-                    label="File Uploads"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          />
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -201,14 +144,13 @@ export default function AssignmentEditor() {
         >
           Save
         </Button>
-        <Button
-          variant="secondary"
-          size="lg"
-          className="me-2 float-end"
+        <Link
+          to={`/Kambaz/Courses/${cid}/Assignments`}
+          className="btn btn-secondary btn-lg float-end me-2"
           id="wd-cancel"
         >
           Cancel
-        </Button>
+        </Link>
       </Form>
     </div>
   );
