@@ -54,8 +54,12 @@ export default function Assignments() {
                     {assignment.title}
                   </a>
                   <span className="d-block">
-                    <b>Due Date:</b> {assignment.dueDate} | {assignment.points}
-                    pts
+                    <span style={{ color: "#DC3545" }}>Multiple Modules</span> |{" "}
+                    <b>Not available until </b> {assignment.availableDate} |
+                  </span>
+                  <span className="d-block">
+                    {" "}
+                    <b>Due </b> {assignment.dueDate} | {assignment.points}pts
                   </span>
                 </div>
                 <div className="ms-auto">
