@@ -1,79 +1,161 @@
-import { Form, InputGroup, ListGroup } from "react-bootstrap";
-import { BsGripVertical } from "react-icons/bs";
-import { FaSearch } from "react-icons/fa";
-import { RiFileEditLine } from "react-icons/ri";
-import { useParams } from "react-router";
-import AssignmentsControls from "./AssignmentsControls";
-import AssignmentsButton from "./AssignmentsButton";
+import { Button, InputGroup, ListGroup, Modal } from "react-bootstrap";
+import { IoIosSearch } from "react-icons/io";
+import { Form, Row, Col } from "react-bootstrap";
+import { BsGripVertical, BsPlus } from "react-icons/bs";
 import LessonControlButtons from "../Modules/LessonControlButtons";
-import * as db from "../../Database";
-import "./styles.css";
+import { LuNotebookPen } from "react-icons/lu";
+import { IoEllipsisVertical } from "react-icons/io5";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router";
+import { deleteAssignment } from "./reducer";
+import { FaTrash } from "react-icons/fa";
+import { useState } from "react";
 
 export default function Assignments() {
+  const dispatch = useDispatch();
   const { cid } = useParams();
-  const assignments = db.assignments.filter(
-    (assignment) => assignment.course === cid
-  );
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const { assignments } = useSelector((state: any) => state.assignmentReducer);
+  const isFaculty = currentUser?.role === "FACULTY";
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
+
+  const handleDeleteClick = (assignment: any) => {
+    setSelectedAssignment(assignment);
+    setShowDeleteDialog(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (selectedAssignment) {
+      dispatch(deleteAssignment(selectedAssignment._id));
+    }
+    setShowDeleteDialog(false);
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteDialog(false);
+  };
 
   return (
     <div id="wd-assignments">
-      <div className="wd-header">
-        <InputGroup className="wd-search-bar">
-          <InputGroup.Text>
-            <FaSearch className="fs-4 text-secondary" />
-          </InputGroup.Text>
-          <Form.Control
-            type="text"
-            placeholder="Search..."
-            id="wd-search-assignment"
-          />
-        </InputGroup>
-        <AssignmentsControls />
+      <div className="d-flex col justify-content-between align-items-center mb-5">
+        <Row>
+          <Form.Group as={Col}>
+            <InputGroup>
+              <InputGroup.Text>
+                <IoIosSearch />
+              </InputGroup.Text>
+              <Form.Control type="text" placeholder="Search here.." />
+            </InputGroup>
+          </Form.Group>
+        </Row>
+        <div>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="me-1 align-self-end"
+            id="wd-view-progress"
+          >
+            + Group
+          </Button>
+          <Button
+            variant="danger"
+            size="lg"
+            className="me-1 justify-content-end"
+            id="wd-view-progress"
+          >
+            <Link
+              className="text-decoration-none text-white"
+              to={`/Kambaz/Courses/${cid}/Assignments/new`}
+            >
+              + Assignment
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <ListGroup className="rounded-0" id="wd-modules">
-        <div className="wd-title p-3 ps-2 bg-secondary">
-          <BsGripVertical className="me-2 fs-3" />
-          ASSIGNMENTS <AssignmentsButton />
-        </div>
-
-        {assignments.length > 0 ? (
+        <ListGroup.Item className="wd-module p-0 mb-5 fs-5 border-gray">
+          <div className="wd-title p-4 ps-2 bg-secondary">
+            <BsGripVertical className="fs-3 mx-2" />
+            ASSIGNMENTS
+            <div className="float-end">
+              <span className="me-1 p-2 position-relative border rounded-5 border-black">
+                40% of Total
+              </span>
+              <BsPlus />
+              <IoEllipsisVertical className="fs-4" />
+            </div>
+          </div>
           <ListGroup className="wd-lessons rounded-0">
-            {assignments.map((assignment) => (
-              <ListGroup.Item
-                key={assignment._id}
-                className="wd-lesson p-3 ps-1 d-flex align-items-center"
-              >
-                <BsGripVertical className="me-2 fs-3" />
-                <RiFileEditLine className="me-2 fs-3" color="green" />
-                <div className="wd-assignment-text ms-2">
-                  <a
-                    href={`#/Kambaz/Courses/${cid}/Assignments/${assignment._id}`}
-                    className="wd-assignment-link d-block"
-                  >
-                    {assignment.title}
-                  </a>
-                  <span className="d-block">
-                    <span style={{ color: "#DC3545" }}>Multiple Modules</span> |{" "}
-                    <b>Not available until </b> {assignment.availableDate} |
+            {assignments
+              .filter((assignment: any) => assignment.course === cid)
+              .map((assignment: any) => (
+                <ListGroup.Item
+                  key={assignment._id}
+                  className="wd-lesson p-3 ps-1 d-flex flex-row align-items-center"
+                >
+                  <BsGripVertical className="me-2 fs-3 flex-shrink-0 mx-2" />
+                  <LuNotebookPen className="flex-shrink-0 mx-2" />
+                  <span className="d-flex flex-column flex-grow-1 flex-shrink-1 mx-2">
+                    {isFaculty ? (
+                      <a
+                        href={`#/Kambaz/Courses/${cid}/Assignments/${assignment._id}`}
+                        className="wd-assignment-link text-decoration-none text-black"
+                      >
+                        <strong>{assignment.title}</strong>
+                      </a>
+                    ) : (
+                      <strong>{assignment.title}</strong>
+                    )}
+                    <div>
+                      <span className="d-block">
+                        <span style={{ color: "#DC3545" }}>
+                          Multiple Modules
+                        </span>{" "}
+                        | <b>Not available until </b> {assignment.from} |
+                      </span>
+                      <span className="d-block">
+                        {" "}
+                        <b>Due </b> {assignment.dueDate} | {assignment.points}
+                        pts
+                      </span>
+                    </div>
                   </span>
-                  <span className="d-block">
-                    {" "}
-                    <b>Due </b> {assignment.dueDate} | {assignment.points}pts
-                  </span>
-                </div>
-                <div className="ms-auto">
+                  {isFaculty && (
+                    <FaTrash
+                      className="text-danger me-2 mb-1"
+                      cursor={"pointer"}
+                      onClick={() => handleDeleteClick(assignment)}
+                    />
+                  )}
                   <LessonControlButtons />
-                </div>
-              </ListGroup.Item>
-            ))}
+                </ListGroup.Item>
+              ))}
           </ListGroup>
-        ) : (
-          <p className="text-center p-3">
-            No assignments found for this course.
-          </p>
-        )}
+        </ListGroup.Item>
       </ListGroup>
+
+      <Modal show={showDeleteDialog} onHide={handleDeleteCancel} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete{" "}
+          <strong>{selectedAssignment?.title}</strong>? This action cannot be
+          undone.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleDeleteCancel}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeleteConfirm}>
+            Yes, Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
