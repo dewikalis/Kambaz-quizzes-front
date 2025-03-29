@@ -1,17 +1,6 @@
 import { Modal, FormControl, Button } from "react-bootstrap";
-export default function ModuleEditor({
-  show,
-  handleClose,
-  dialogTitle,
-  moduleName,
-  setModuleName,
-  addModule,
-}: {
-  show: boolean;
-  handleClose: () => void;
-  dialogTitle: string;
-  moduleName: string;
-  setModuleName: (name: string) => void;
+export default function ModuleEditor({ show, handleClose, dialogTitle, moduleName, setModuleName, addModule, }: {
+  show: boolean; handleClose: () => void; dialogTitle: string; moduleName: string; setModuleName: (name: string) => void;
   addModule: () => void;
 }) {
   return (
@@ -20,28 +9,16 @@ export default function ModuleEditor({
         <Modal.Title>{dialogTitle}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <FormControl
-          value={moduleName}
-          onChange={(e) => {
-            setModuleName(e.target.value);
-          }}
-        />
+        <FormControl value={moduleName}
+          onChange={(e) => { setModuleName(e.target.value); }} />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          {" "}
-          Cancel{" "}
-        </Button>
-        <Button
-          variant="primary"
+        <Button variant="secondary" onClick={handleClose}> Cancel </Button>
+        <Button variant="primary"
           onClick={() => {
             addModule();
             handleClose();
-          }}
-        >
-          {" "}
-          Add Module{" "}
-        </Button>
+          }} > Add Module </Button>
       </Modal.Footer>
     </Modal>
   );

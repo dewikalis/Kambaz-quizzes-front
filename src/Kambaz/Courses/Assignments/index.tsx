@@ -8,9 +8,10 @@ import { IoEllipsisVertical } from "react-icons/io5";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router";
-import { deleteAssignment } from "./reducer";
+import { deleteAssignment, setAssignments } from "./reducer";
 import { FaTrash } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import * as assignmentClient from "./client"
 
 export default function Assignments() {
   const dispatch = useDispatch();
@@ -22,13 +23,20 @@ export default function Assignments() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
 
+  const fetchAssignments = async () => {
+    if (!cid) return
+    const assignments = await assignmentClient.findAssignmentsForCourse(cid);
+    dispatch(setAssignments(assignments));
+  };
+
   const handleDeleteClick = (assignment: any) => {
     setSelectedAssignment(assignment);
     setShowDeleteDialog(true);
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (selectedAssignment) {
+      await assignmentClient.deleteAssignment(selectedAssignment._id);
       dispatch(deleteAssignment(selectedAssignment._id));
     }
     setShowDeleteDialog(false);
@@ -37,6 +45,8 @@ export default function Assignments() {
   const handleDeleteCancel = () => {
     setShowDeleteDialog(false);
   };
+
+  useEffect(() => { fetchAssignments() }, [])
 
   return (
     <div id="wd-assignments">
@@ -115,11 +125,12 @@ export default function Assignments() {
                         <span style={{ color: "#DC3545" }}>
                           Multiple Modules
                         </span>{" "}
-                        | <b>Not available until </b> {assignment.from} |
+                        | <b>Not available until </b> {assignment.from}{" "}
+                        |
                       </span>
                       <span className="d-block">
                         {" "}
-                        <b>Due </b> {assignment.dueDate} | {assignment.points}
+                        <b>Due </b> {assignment.due} | {assignment.points}
                         pts
                       </span>
                     </div>

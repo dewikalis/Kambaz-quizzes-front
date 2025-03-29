@@ -9,30 +9,32 @@ export default function Account() {
   return (
     <div id="wd-account-screen">
       <table>
-        <tr>
-          <td valign="top">
-            <AccountNavigation />
-          </td>
-          <td valign="top">
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <Navigate
-                    to={
-                      currentUser
-                        ? "/Kambaz/Account/Profile"
-                        : "/Kambaz/Account/Signin"
-                    }
-                  />
-                }
-              />
-              <Route path="/Signin" element={<Signin />} />
-              <Route path="/Profile" element={<Profile />} />
-              <Route path="/Signup" element={<Signup />} />
-            </Routes>
-          </td>
-        </tr>
+        <tbody>
+          <tr>
+            <td valign="top">
+              <AccountNavigation />
+            </td>
+            <td valign="top">
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <Navigate
+                      to={
+                        currentUser
+                          ? "/Kambaz/Account/Profile"
+                          : "/Kambaz/Account/Signin"
+                      }
+                    />
+                  }
+                />
+                <Route path="/Signin" element={<Signin />} />
+                <Route path="/Profile" element={<Profile />} />
+                <Route path="/Signup" element={<Signup />} />
+              </Routes>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   );

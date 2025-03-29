@@ -2,22 +2,33 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "./reducer";
+import * as client from "./client";
+import { setEnrollments } from "../Dashboard/reducer";
 export default function Profile() {
   const [profile, setProfile] = useState<any>({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const updateProfile = async () => {
+    const updatedProfile = await client.updateUser(profile);
+    dispatch(setCurrentUser(updatedProfile));
+  };
+
   const fetchProfile = () => {
     if (!currentUser) return navigate("/Kambaz/Account/Signin");
     setProfile(currentUser);
   };
-  const signout = () => {
+  const signout = async () => {
+    await client.signout();
     dispatch(setCurrentUser(null));
+    dispatch(setEnrollments(null))
     navigate("/Kambaz/Account/Signin");
   };
+
   useEffect(() => {
     fetchProfile();
   }, []);
+
   return (
     <div id="wd-profile-screen">
       <h1>Profile</h1>
@@ -78,13 +89,17 @@ export default function Profile() {
             <option value="FACULTY">Faculty</option>{" "}
             <option value="STUDENT">Student</option>
           </select>
-          <button
-            onClick={signout}
-            className="btn btn-danger w-100 mb-2"
-            id="wd-signout-btn"
-          >
-            Sign out
-          </button>
+          <div>
+
+            <button onClick={updateProfile} className="btn btn-primary w-100 mb-2"> Update </button>
+            <button
+              onClick={signout}
+              className="btn btn-danger w-100 mb-2"
+              id="wd-signout-btn"
+            >
+              Sign out
+            </button>
+          </div>
         </div>
       )}
     </div>

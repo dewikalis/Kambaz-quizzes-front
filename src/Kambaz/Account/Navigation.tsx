@@ -11,11 +11,9 @@ export default function AccountNavigation() {
           key={link}
           to={`/Kambaz/Account/${link}`}
           id={`wd-account-${link.toLowerCase()}`}
-          className={`list-group-item ${
-            pathname === `/Kambaz/Account/${link}` ? "active" : ""
-          } ${
-            link === "Signup" || link === "Profile" ? "text-danger" : ""
-          } border border-0`}
+          className={`list-group-item ${pathname === `/Kambaz/Account/${link}` ? "active" : ""
+            } ${link === "Signup" || link === "Profile" ? "text-danger" : ""
+            } border border-0`}
         >
           {link}
         </Link>

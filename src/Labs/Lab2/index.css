@@ -1,21 +1,3 @@
-/* p#wd-id-selector-1 {
-  background-color: red;
-  color: white;
-}
-.wd-class-selector {
-  background-color: yellow;
-  color: blue;
-} */
-
-.wd-selector-1 .wd-selector-3 {
-  background-color: red;
-  color: white;
-}
-.wd-selector-2 > .wd-selector-3 > .wd-selector-4 {
-  background-color: yellow;
-  color: blue;
-}
-
 .wd-fg-color-black {
   color: black;
 }
@@ -32,6 +14,26 @@
   color: green;
 }
 
+p#wd-id-selector-1 {
+  background-color: red;
+  color: white;
+}
+p#wd-id-selector-2 {
+  background-color: yellow;
+  color: black;
+}
+.wd-class-selector {
+  background-color: yellow;
+  color: blue;
+}
+.wd-selector-1 .wd-selector-3 {
+  background-color: red;
+  color: white;
+}
+.wd-selector-2 > .wd-selector-3 > .wd-selector-4 {
+  background-color: yellow;
+  color: blue;
+}
 .wd-bg-color-yellow {
   background-color: #ffff07;
 }
@@ -69,7 +71,6 @@
 .wd-border-blue {
   border-color: #7070ff;
 }
-
 .wd-padded-top-left {
   padding-top: 50px;
   padding-left: 50px;
@@ -95,24 +96,6 @@
 
 .wd-margin-all-around {
   margin: 30px;
-}
-
-.wd-rounded-corners-top {
-  border-top-left-radius: 40px;
-  border-top-right-radius: 40px;
-}
-
-.wd-rounded-corners-bottom {
-  border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
-}
-
-.wd-rounded-corners-all-around {
-  border-radius: 50px;
-}
-
-.wd-rounded-corners-inline {
-  border-radius: 30px 0px 20px 50px;
 }
 
 .wd-dimension-portrait {
@@ -143,7 +126,6 @@
 .wd-pos-relative {
   position: relative;
 }
-
 .wd-pos-absolute-10-10 {
   position: absolute;
   top: 10px;
@@ -159,33 +141,14 @@
   top: 20px;
   left: 120px;
 }
-
 .wd-pos-fixed {
   position: fixed;
   right: 0px;
   bottom: 50%;
 }
-
-.wd-zindex-bring-to-front {
-  z-index: 10;
-}
-
 .wd-float-left {
   float: left;
   height: 100px;
-}
-
-.wd-float-right {
-  float: right;
-  height: 100px;
-}
-
-.wd-float-done {
-  clear: both;
-}
-
-.wd-float-left {
-  float: left;
 }
 
 .wd-float-right {
@@ -220,21 +183,17 @@
   width: 60%;
   float: left;
 }
-
 .wd-grid-col-right-sidebar {
   width: 20%;
   float: left;
 }
-
 .wd-flex-row-container {
   display: flex;
   flex-direction: row;
 }
-
 .wd-flex-grow-1 {
   flex-grow: 1;
 }
-
 .wd-width-75px {
   width: 75px;
 }

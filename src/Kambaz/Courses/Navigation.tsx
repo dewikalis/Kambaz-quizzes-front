@@ -1,40 +1,18 @@
-import { Link, useParams, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+export default function CourseNavigation({ course }: any) {
+  const links = ["Home", "Modules", "Piazza", "Zoom", "Assignments", "Quizzes", "Grades", "People"];
 
-export default function CourseNavigation() {
-  const { cid } = useParams();
   const location = useLocation();
-
-  const links = [
-    "Home",
-    "Modules",
-    "Piazza",
-    "Zoom",
-    "Assignments",
-    "Quizzes",
-    "Grades",
-    "People",
-  ];
+  const currentLocation = location.pathname.split("/").pop();
 
   return (
     <div id="wd-courses-navigation" className="wd list-group fs-5 rounded-0">
-      {links.map((link) => {
-        const path =
-          link === "People"
-            ? `/Kambaz/Courses/${cid}/People`
-            : `/Kambaz/Courses/${cid}/${link}`;
-        const isActive = location.pathname === path;
-        return (
-          <Link
-            key={link}
-            to={path}
-            className={`list-group-item border border-0 ${
-              isActive ? "active" : "text-danger"
-            }`}
-          >
-            {link}
-          </Link>
-        );
-      })}
+      {links.map((link) => (
+        <Link key={`wd-course-${link.toLowerCase()}-link`} to={`/Kambaz/Courses/${course?._id}/${link}`} id={`wd-course-${link.toLowerCase()}-link`}
+          className={`list-group-item text-danger border border-0 ${link === currentLocation ? "active" : ""}`}>
+          {link}
+        </Link>
+      ))}
     </div>
   );
 }

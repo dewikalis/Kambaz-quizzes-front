@@ -57,14 +57,12 @@ export default function Lab1() {
         </ol>
         My favorite recipe:
         <ol id="wd-your-favorite-recipe">
-          <li>Make espresso</li>
-          <li>Make cream</li>
-          <li>Soak ladyfingers in espresso</li>
+          <li>Add Ice</li>
+          <li>Add Lemon Juice</li>
+          <li>Add Honey</li>
           <li>
-            Construct tiramisu by putting layers of cream between ladyfingers
+            Add Water
           </li>
-          <li>Refrigerate and let sit for 4 hours</li>
-          <li>Eat it up</li>
         </ol>
         <h5>Unordered List Tag</h5>
         My favorite books (in no particular order)
@@ -77,10 +75,9 @@ export default function Lab1() {
         </ul>
         Your favorite books (in no particular order)
         <ul id="wd-your-books">
-          <li>Kitchen</li>
-          <li>The Three Body Problem</li>
-          <li>What you're Looking for is in the Library</li>
-          <li>On Earth we're Briefly Gorgeous</li>
+          <li>Cracking the Coding Interview</li>
+          <li>System Design Interview</li>
+          <li>Coding Interview Pattern</li>
         </ul>
       </div>
       <div id="wd-tables">
@@ -98,68 +95,68 @@ export default function Lab1() {
             <tr>
               <td>Q1</td>
               <td>HTML</td>
-              <td>2/3/21</td>
-              <td>85</td>
+              <td>12/12/23</td>
+              <td>100</td>
             </tr>
             <tr>
               <td>Q2</td>
-              <td>CSS</td>
+              <td>HTML2</td>
               <td>2/10/21</td>
-              <td>90</td>
+              <td>100</td>
             </tr>
             <tr>
               <td>Q3</td>
-              <td>CSS</td>
+              <td>HTML3</td>
               <td>2/14/21</td>
-              <td>86</td>
+              <td>100</td>
             </tr>
             <tr>
               <td>Q4</td>
-              <td>HTML</td>
+              <td>HTML4</td>
               <td>3/20/21</td>
-              <td>95</td>
+              <td>100</td>
             </tr>
             <tr>
               <td>Q5</td>
-              <td>JavaScript</td>
+              <td>HTML5</td>
               <td>3/30/21</td>
-              <td>87</td>
+              <td>100</td>
             </tr>
             <tr>
               <td>Q6</td>
-              <td>JavaScript</td>
+              <td>HTML6</td>
               <td>4/8/21</td>
-              <td>80</td>
+              <td>100</td>
             </tr>
             <tr>
               <td>Q7</td>
-              <td>JavaScript</td>
+              <td>HTML7</td>
               <td>4/20/21</td>
-              <td>98</td>
+              <td>100</td>
             </tr>
             <tr>
               <td>Q8</td>
-              <td>HTML</td>
+              <td>HTML8</td>
               <td>4/25/21</td>
-              <td>95</td>
+              <td>100</td>
             </tr>
             <tr>
               <td>Q9</td>
-              <td>CSS</td>
+              <td>HTML9</td>
               <td>4/26/21</td>
-              <td>80</td>
+              <td>100</td>
             </tr>
             <tr>
               <td>Q10</td>
-              <td>HTML</td>
+              <td>HTML10</td>
               <td>4/27/21</td>
-              <td>83</td>
+              <td>100</td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
               <td colSpan={3}>Average</td>
-              <td>90</td>
+              <td>100</td>
             </tr>
           </tfoot>
         </table>
@@ -314,7 +311,7 @@ export default function Lab1() {
         </a>
         {""} to get dummy text
       </p>
-      <a href="https://github.com/aamaanda/kambaz-react-web-app" id="wd-github">
+      <a href="https://github.com/NelsonDong41/kambaz-react-web-app" id="wd-github">
         Click here
       </a>
       {""} for my GitHub

@@ -11,19 +11,20 @@ import { Link, useParams } from "react-router";
 import { addAssignment, updateAssignment } from "./reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+import * as client from "./client";
 
 export default function AssignmentEditor() {
   const dispatch = useDispatch();
   const { cid, aid } = useParams();
   const { assignments } = useSelector((state: any) => state.assignmentReducer);
-  let currentAssignment = assignments.find(
+  const currentAssignment = assignments.find(
     (assignment: any) => assignment._id === aid
   );
   const [assignment, setAssignment] = useState<any>(currentAssignment);
   const title = assignment?.title || "";
-  const description = assignment?.description || "";
+  const desciption = assignment?.description || "";
   const points = assignment?.points || 100;
-  const dueDate = assignment?.dueDate || "";
+  const due = assignment?.due || "";
   const from = assignment?.from || "";
   const until = assignment?.until || "";
 
@@ -43,7 +44,7 @@ export default function AssignmentEditor() {
         <FormControl
           as="textarea"
           rows={10}
-          value={description}
+          value={desciption}
           onChange={(e) =>
             setAssignment((prev: any) => ({
               ...prev,
@@ -163,7 +164,7 @@ export default function AssignmentEditor() {
             <FormControl
               type="date"
               name="duedate"
-              value={dueDate}
+              value={due}
               onChange={(e) =>
                 setAssignment((prev: any) => ({ ...prev, due: e.target.value }))
               }
@@ -173,7 +174,7 @@ export default function AssignmentEditor() {
                 <FormLabel>Available from</FormLabel>
                 <FormControl
                   type="date"
-                  name="availableFromDate"
+                  name="duedate"
                   value={from}
                   onChange={(e) =>
                     setAssignment((prev: any) => ({
@@ -187,7 +188,7 @@ export default function AssignmentEditor() {
                 <FormLabel>Until</FormLabel>
                 <FormControl
                   type="date"
-                  name="availableUntilDate"
+                  name="duedate"
                   value={until}
                   onChange={(e) =>
                     setAssignment((prev: any) => ({
@@ -211,10 +212,12 @@ export default function AssignmentEditor() {
             <Button
               className="float-end"
               variant="danger"
-              onClick={() => {
+              onClick={async () => {
                 if (currentAssignment) {
+                  await client.updateAssignment({ ...assignment, course: cid });
                   dispatch(updateAssignment({ ...assignment, course: cid }));
                 } else {
+                  await client.addAssignment({ ...assignment, course: cid });
                   dispatch(addAssignment({ ...assignment, course: cid }));
                 }
               }}
