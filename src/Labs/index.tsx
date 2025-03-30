@@ -11,10 +11,9 @@ import Lab5 from "./Lab5";
 export default function Labs() {
   return (
     <Provider store={store}>
-
       <div>
         <h1>Labs</h1>
-        <h1>Nelson Dong</h1>
+        <h2>Amanda Lee</h2>
         <TOC />
         <Routes>
           <Route path="/" element={<Navigate to="Lab1" />} />
