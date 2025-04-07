@@ -11,7 +11,7 @@ import { Link } from "react-router";
 import { deleteAssignment, setAssignments } from "./reducer";
 import { FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import * as assignmentClient from "./client"
+import * as assignmentClient from "./client";
 
 export default function Assignments() {
   const dispatch = useDispatch();
@@ -19,12 +19,11 @@ export default function Assignments() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { assignments } = useSelector((state: any) => state.assignmentReducer);
   const isFaculty = currentUser?.role === "FACULTY";
-
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
 
   const fetchAssignments = async () => {
-    if (!cid) return
+    if (!cid) return;
     const assignments = await assignmentClient.findAssignmentsForCourse(cid);
     dispatch(setAssignments(assignments));
   };
@@ -46,7 +45,9 @@ export default function Assignments() {
     setShowDeleteDialog(false);
   };
 
-  useEffect(() => { fetchAssignments() }, [])
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
 
   return (
     <div id="wd-assignments">
@@ -125,8 +126,7 @@ export default function Assignments() {
                         <span style={{ color: "#DC3545" }}>
                           Multiple Modules
                         </span>{" "}
-                        | <b>Not available until </b> {assignment.from}{" "}
-                        |
+                        | <b>Not available until </b> {assignment.from} |
                       </span>
                       <span className="d-block">
                         {" "}

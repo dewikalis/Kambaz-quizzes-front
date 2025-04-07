@@ -26,7 +26,7 @@ export default function KambazNavigation() {
         action
         className="bg-black border-0 text-center"
       >
-        <img src="/assets/northeastern_logo.png" width="75px" />
+        <img src="/images/NEU.png" width="75px" />
       </ListGroup.Item>
       <ListGroup.Item
         as={Link}

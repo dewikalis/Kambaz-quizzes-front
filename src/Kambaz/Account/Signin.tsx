@@ -14,8 +14,8 @@ export default function Signin() {
     if (!user) return;
     dispatch(setCurrentUser(user));
 
-    const enrollments = await client.getEnrollments()
-    dispatch(setEnrollments(enrollments))
+    const enrollments = await client.getEnrollments();
+    dispatch(setEnrollments(enrollments));
     navigate("/Kambaz/Dashboard");
   };
 

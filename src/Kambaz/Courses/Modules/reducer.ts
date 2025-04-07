@@ -29,10 +29,9 @@ const modulesSlice = createSlice({
         m._id === moduleId ? { ...m, editing: true } : m
       ) as any;
     },
-    setModules: (state, action) => {
-      state.modules = action.payload;
+    setModules: (state, { payload: modules }) => {
+      state.modules = modules;
     },
-
   },
 });
 export const { addModule, deleteModule, updateModule, editModule, setModules } =
