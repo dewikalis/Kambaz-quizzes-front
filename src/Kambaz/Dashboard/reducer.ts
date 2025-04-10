@@ -3,7 +3,6 @@ import { v4 as uuid } from "uuid";
 
 const initialState = {
   enrollments: [] as any[],
-  showAllEnrollments: false
 };
 
 const enrollmentSlice = createSlice({
@@ -19,15 +18,12 @@ const enrollmentSlice = createSlice({
         state.enrollments = [...state.enrollments, { _id: uuid(), user: action.payload.userId, course: action.payload.courseId }]
       }
     },
-    toggleShowAllEnrollments: (state) => {
-      state.showAllEnrollments = !state.showAllEnrollments
-    },
     setEnrollments: (state, action: PayloadAction<any>) => {
       state.enrollments = action.payload
     }
   },
 });
 
-export const { toggleEnrollment, toggleShowAllEnrollments, setEnrollments } = enrollmentSlice.actions;
+export const { toggleEnrollment, setEnrollments } = enrollmentSlice.actions;
 
 export default enrollmentSlice.reducer;

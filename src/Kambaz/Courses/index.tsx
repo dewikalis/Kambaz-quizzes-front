@@ -16,8 +16,9 @@ export default function Courses({ courses }: { courses: any[] }) {
     <div id="wd-courses">
       <h2 className="text-danger">
         <FaAlignJustify className="me-4 fs-4 mb-1" />
-        {course && course.name}  &gt; {pathname.split("/")[4]}</h2> <hr />
-
+        {course && course.name} &gt; {pathname.split("/")[4]}
+      </h2>{" "}
+      <hr />
       <div className="d-flex">
         <div className="d-none d-md-block">
           <CourseNavigation course={course} />
@@ -31,7 +32,8 @@ export default function Courses({ courses }: { courses: any[] }) {
             <Route path="Assignments/:aid" element={<AssignmentEditor />} />
             <Route path="People" element={<PeopleTable />} />
           </Routes>
-        </div></div>
-    </div >
+        </div>
+      </div>
+    </div>
   );
 }
