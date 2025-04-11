@@ -9,6 +9,7 @@ import PeopleTable from "./People/Table";
 import { useParams } from "react-router";
 import QuizEditor from "./Quizzes/QuizEditor";
 import Quizzes from "./Quizzes";
+import QuizPreview from "./Quizzes/QuizPreview";
 export default function Courses({ courses }: { courses: any[] }) {
   const { cid } = useParams();
   const course = courses.find((course) => course._id === cid);
@@ -34,6 +35,7 @@ export default function Courses({ courses }: { courses: any[] }) {
             <Route path="Assignments/:aid" element={<AssignmentEditor />} />
             <Route path="Quizzes" element={<Quizzes />} />
             <Route path="Quizzes/:aid" element={<QuizEditor />} />
+            <Route path="Quizzes/:quizId/preview" element={<QuizPreview />} />
             <Route path="People" element={<PeopleTable />} />
           </Routes>
         </div>

@@ -9,6 +9,7 @@ import FillBlankEditor from "./FillBlankEditor";
 
 export default function QuizEditor() {
   const { cid, qid } = useParams();
+  const { quizId } = useParams();
   const dispatch = useDispatch();
   const { quizzes } = useSelector((state: any) => state.quizReducer);
 
@@ -469,9 +470,19 @@ export default function QuizEditor() {
             <p>No questions added yet.</p>
           )}
 
-          <Button variant="primary" onClick={handleAddQuestion}>
-            + Add Question
-          </Button>
+          <div className="d-flex gap-3 mt-4">
+            <Button variant="primary" onClick={handleAddQuestion}>
+              + Add Question
+            </Button>
+
+            <Link
+              to={`/Kambaz/Courses/${cid}/Quizzes/${quizId}/preview`}
+              className="btn btn-secondary"
+            >
+              Preview Quiz
+            </Link>
+          </div>
+
           <div
             id="question-actions"
             className="d-flex justify-content-center gap-2 mt-3"
