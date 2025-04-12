@@ -10,10 +10,26 @@ import { useParams } from "react-router";
 import QuizEditor from "./Quizzes/QuizEditor";
 import Quizzes from "./Quizzes";
 import QuizPreview from "./Quizzes/QuizPreview";
+import * as courseClient from "./client"
+import { useEffect, useState } from "react";
+
 export default function Courses({ courses }: { courses: any[] }) {
   const { cid } = useParams();
   const course = courses.find((course) => course._id === cid);
   const { pathname } = useLocation();
+  const [users, setUsers] = useState([]);
+
+  const fetchUsersForCourse = async (cid: string) => {
+    const users = await courseClient.findUsersForCourse(cid)
+    setUsers(users);
+  }
+
+  useEffect(() => {
+    if (cid) {
+      fetchUsersForCourse(cid)
+    }
+  }, [cid])
+
 
   return (
     <div id="wd-courses">
@@ -36,7 +52,8 @@ export default function Courses({ courses }: { courses: any[] }) {
             <Route path="Quizzes" element={<Quizzes />} />
             <Route path="Quizzes/:aid" element={<QuizEditor />} />
             <Route path="Quizzes/:quizId/preview" element={<QuizPreview />} />
-            <Route path="People" element={<PeopleTable />} />
+
+            <Route path="People" element={<PeopleTable users={users} />} />
           </Routes>
         </div>
       </div>
