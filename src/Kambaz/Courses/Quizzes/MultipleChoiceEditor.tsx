@@ -1,11 +1,11 @@
-import { Editor, EditorProvider } from "react-simple-wysiwyg";
+import Editor from "react-simple-wysiwyg";
 import { useState } from "react";
 import { Button, Form, Card } from "react-bootstrap";
 
 export default function MultipleChoiceEditor() {
   const [title, setTitle] = useState("");
   const [points, setPoints] = useState(0);
-  const [question, setQuestion] = useState("");
+  const [question, setQuestion] = useState<string>("");
   const [choices, setChoices] = useState([""]);
   const [correctChoice, setCorrectChoice] = useState(0);
 
@@ -56,12 +56,10 @@ export default function MultipleChoiceEditor() {
         {/* Question with WYSIWYG Editor */}
         <Form.Group className="mb-3">
           <Form.Label>Question</Form.Label>
-          <EditorProvider>
-            <Editor
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-            />
-          </EditorProvider>
+          <Editor
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+          />
         </Form.Group>
 
         {/* Choices */}

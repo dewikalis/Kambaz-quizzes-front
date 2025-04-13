@@ -6,6 +6,7 @@ import { addQuiz, updateQuiz } from "./reducer";
 import MultipleChoiceEditor from "./MultipleChoiceEditor";
 import TrueFalseEditor from "./TrueFalseEditor";
 import FillBlankEditor from "./FillBlankEditor";
+import Editor from "react-simple-wysiwyg";
 
 export default function QuizEditor() {
   const { cid, qid } = useParams();
@@ -37,6 +38,11 @@ export default function QuizEditor() {
   const availableDate = quizState?.from || "";
   const untilDate = quizState?.until || "";
   const [questionType, setQuestionType] = useState("");
+  const [html, setHtml] = useState("my <b>HTML</b>");
+
+  // function onChange(e) {
+  //   setHtml(e.target.value);
+  // }
 
   const handleSave = () => {
     if (currentQuiz) {
@@ -136,10 +142,8 @@ export default function QuizEditor() {
             {/* Description */}
             <Form.Group className="mb-3" controlId="wd-description">
               <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={description}
+              <Editor
+                value={quizState.description}
                 onChange={(e) =>
                   setQuizState((prev: any) => ({
                     ...prev,

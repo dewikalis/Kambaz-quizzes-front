@@ -1,4 +1,4 @@
-import { Editor, EditorProvider } from "react-simple-wysiwyg";
+import Editor from "react-simple-wysiwyg";
 import { useState } from "react";
 import { Button, Form, Card } from "react-bootstrap";
 
@@ -57,15 +57,13 @@ export default function FillInTheBlankEditor() {
         </Form.Group>
 
         {/* Question with WYSIWYG Editor */}
-        <EditorProvider>
-          <Form.Group className="mb-3">
-            <Form.Label>Question</Form.Label>
-            <Editor
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-            />
-          </Form.Group>
-        </EditorProvider>
+        <Form.Group className="mb-3">
+          <Form.Label>Question</Form.Label>
+          <Editor
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+          />
+        </Form.Group>
 
         {/* Correct Answers */}
         <Form.Group className="mb-3">
