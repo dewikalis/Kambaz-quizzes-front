@@ -67,11 +67,15 @@ const quizzesSlice = createSlice({
         quiz._id === updatedQuiz._id ? { ...quiz, ...updatedQuiz } : quiz
       );
     },
+
+    setQuizzes: (state, action: PayloadAction<Quiz[]>) => {
+      state.quizzes = action.payload;
+    }
   },
 });
 
 // Export actions
-export const { addQuiz, deleteQuiz, updateQuiz } = quizzesSlice.actions;
+export const { addQuiz, deleteQuiz, updateQuiz, setQuizzes } = quizzesSlice.actions;
 
 // Export the reducer
 export default quizzesSlice.reducer;

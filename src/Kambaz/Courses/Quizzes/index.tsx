@@ -3,21 +3,25 @@ import { Button } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
 import { useParams, Link } from "react-router";
 import * as client from "./client"
+import { useDispatch, useSelector } from "react-redux";
+import { setQuizzes } from "./reducer";
 
 export default function Quizzes() {
   const { cid } = useParams();
-  const [quizzes, setQuizzes] = useState({});
+  const dispatch = useDispatch();
+  const { quizzes } = useSelector((state: any) => state.quizzesReducer)
 
   useEffect(() => {
     const fetchQuizzes = async () => {
-      if (!cid) return
+      if (!cid) return;
       const quizzes = await client.getQuizzes(cid);
-      console.log(quizzes)
-      setQuizzes(quizzes);
-    }
+      dispatch(setQuizzes(quizzes));
+    };
 
     fetchQuizzes();
-  }, [cid])
+  }, [cid, dispatch])
+
+  console.log(JSON.stringify(quizzes, null, 2))
 
   return (
     <div id="wd-modules-controls" className="text-nowrap">
