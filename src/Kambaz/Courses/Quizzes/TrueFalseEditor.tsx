@@ -1,14 +1,18 @@
 import { Editor, EditorProvider } from "react-simple-wysiwyg";
 import { useState } from "react";
 import { Button, Form, Card } from "react-bootstrap";
+import { QuestionEditorProps } from "./QuizEditor";
 
-export default function TrueFalseQuestionEditor() {
+export default function TrueFalseQuestionEditor({ index, handleUpdateQuestion }: QuestionEditorProps) {
   const [title, setTitle] = useState("");
   const [points, setPoints] = useState(0);
   const [question, setQuestion] = useState("");
   const [correctAnswer, setCorrectAnswer] = useState("true");
 
-  const handleSave = () => alert("Question saved!");
+  const handleSave = () => {
+    alert("Question saved!");
+    handleUpdateQuestion(index, { title, points, question, correctAnswers: [correctAnswer], hasChoices: false, choices: [] })
+  }
   const handleCancel = () => {
     setTitle("");
     setPoints(0);

@@ -1,13 +1,14 @@
 import { Editor, EditorProvider } from "react-simple-wysiwyg";
 import { useState } from "react";
 import { Button, Form, Card } from "react-bootstrap";
+import { QuestionEditorProps } from "./QuizEditor";
 
-export default function MultipleChoiceEditor() {
+export default function MultipleChoiceEditor({ index, handleUpdateQuestion }: QuestionEditorProps) {
   const [title, setTitle] = useState("");
   const [points, setPoints] = useState(0);
   const [question, setQuestion] = useState("");
   const [choices, setChoices] = useState([""]);
-  const [correctChoice, setCorrectChoice] = useState(0);
+  const [correctChoice, setCorrectChoice] = useState("");
 
   const handleChoiceChange = (index: number, value: string) => {
     const newChoices = [...choices];
@@ -19,13 +20,17 @@ export default function MultipleChoiceEditor() {
   const removeChoice = (index: number) =>
     setChoices(choices.filter((_, i) => i !== index));
 
-  const handleSave = () => alert("Question saved!");
+  const handleSave = () => {
+    alert("Question saved!");
+    handleUpdateQuestion(index, { title, points, question, correctAnswers: [correctChoice], hasChoices: true, choices })
+
+  };
   const handleCancel = () => {
     setTitle("");
     setPoints(0);
     setQuestion("");
     setChoices([""]);
-    setCorrectChoice(0);
+    setCorrectChoice("");
   };
 
   return (
@@ -72,8 +77,8 @@ export default function MultipleChoiceEditor() {
               <Form.Check
                 type="radio"
                 name="correctChoice"
-                checked={correctChoice === index}
-                onChange={() => setCorrectChoice(index)}
+                checked={correctChoice === choices[index]}
+                onChange={() => setCorrectChoice(choices[index])}
               />
               <Form.Control
                 type="text"

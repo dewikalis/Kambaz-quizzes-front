@@ -6,6 +6,10 @@ import { addQuiz, updateQuiz } from "./reducer";
 import MultipleChoiceEditor from "./MultipleChoiceEditor";
 import TrueFalseEditor from "./TrueFalseEditor";
 import FillBlankEditor from "./FillBlankEditor";
+import * as client from "./client";
+
+export type QuestionInfo = { title: string, points: number, question: string, correctAnswers: string[], hasChoices: boolean, choices: string[] }
+export type QuestionEditorProps = { index: number, handleUpdateQuestion: (index: number, questionInfo: QuestionInfo) => void }
 
 export default function QuizEditor() {
   const { cid, qid } = useParams();
@@ -24,27 +28,46 @@ export default function QuizEditor() {
   const assignTo = quizState?.assignTo || 100;
   const type = quizState?.type || "";
   const points = quizState?.points || 100;
-  const assignmentGroup = quizState?.group || "";
-  const shuffleAnswer = quizState?.shuffle || "";
+  const assignmentGroup = quizState?.group || "quizzes";
+  const shuffleAnswer = quizState?.shuffle || true;
   const timeLimit = quizState?.time || 20;
-  const multipleAttempts = quizState?.attempts || "";
-  const correctAnswer = quizState?.answer || "";
+  const multipleAttempts = quizState?.attempts || false;
+  const correctAnswer = quizState?.answer || false;
   const accessCode = quizState?.code || "";
-  const oneQuestion = quizState?.oneQuestion || "";
-  const webcamRequired = quizState?.webcam || "";
-  const lockQuestions = quizState?.lock || "";
+  const oneQuestion = quizState?.oneQuestion || true;
+  const webcamRequired = quizState?.webcam || false;
+  const lockQuestions = quizState?.lock || false;
   const dueDate = quizState?.due || "";
   const availableDate = quizState?.from || "";
   const untilDate = quizState?.until || "";
   const [questionType, setQuestionType] = useState("");
 
-  const handleSave = () => {
-    if (currentQuiz) {
-      dispatch(updateQuiz(quizState));
-    } else {
-      dispatch(addQuiz({ ...quizState, course: cid }));
-    }
+  const handleSave = async () => {
+    const response = await client.saveQuiz(
+      { title: quizTitle, description, assignTo, type, points, assignmentGroup, shuffleAnswer, timeLimit, multipleAttempts, correctAnswer, accessCode, oneQuestion, webcamRequired, lockQuestions, dueDate, availableDate, untilDate, questions: quizState?.questions, course: cid }
+    )
+
+    console.log("FRONTEND RESPONSE", response)
+    // if (currentQuiz) {
+    //   dispatch(updateQuiz(quizState));
+    // } else {
+    //   dispatch(addQuiz({ ...quizState, course: cid }));
+    // }
   };
+
+  const handleUpdateQuestion = (index: number, questionInfo: QuestionInfo) => {
+    const { title, points, question, correctAnswers } = questionInfo
+    const currentQuizQuestion = quizState.questions.find((_, i) => i === index);
+    const updatedQuizQuestion = Object.assign(currentQuizQuestion, { title, points, question, correctAnswers })
+    const updatedQuizQuestions = quizState.questions.map((value, i) => {
+      if (i === index) {
+        return updatedQuizQuestion
+      }
+      return value
+    })
+    console.log("handleUpdateQuestion", index, questionInfo)
+    // dispatch(updateQuiz({ ...quizState, updatedQuizQuestions }))
+  }
 
   const [activeTab, setActiveTab] = useState("details");
 
@@ -55,9 +78,10 @@ export default function QuizEditor() {
   const handleAddQuestion = () => {
     const newQuestion = {
       id: Date.now(),
-      type: "Multiple choice question",
-      text: "",
-      options: ["", "", "", ""],
+      type: "MULTIPLE-CHOICE",
+      title: "",
+      description: "",
+      answers: ["", "", "", ""],
       correctOption: 0,
       points: 1,
     };
@@ -74,7 +98,7 @@ export default function QuizEditor() {
     setQuizState((prev: any) => ({ ...prev, questions: updatedQuestions }));
   };
 
-  const [selectedType, setSelectedType] = useState("multiple");
+  const [selectedType, setSelectedType] = useState("MULTIPLE-CHOICE");
 
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedType(e.target.value);
@@ -348,9 +372,8 @@ export default function QuizEditor() {
             </Form.Group>
 
             <div className="d-flex justify-content-end gap-2">
-              <Link to={`/Kambaz/Courses/${cid}/Quizzes`}>
-                <Button variant="danger">Save</Button>
-              </Link>
+              <Button variant="danger" onClick={handleSave}>Save</Button>
+
 
               <Link to={`/Kambaz/Courses/${cid}/Quizzes`}>
                 <Button variant="danger">Save and Publish</Button>
@@ -369,32 +392,6 @@ export default function QuizEditor() {
           {quizState.questions.length > 0 ? (
             quizState.questions.map((question: any, index: number) => (
               <div key={question.id} className="mb-3 p-3 border rounded">
-                <Form.Group className="mb-2">
-                  <Form.Label>Question {index + 1}</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={question.text}
-                    onChange={(e) =>
-                      handleQuestionChange(index, "text", e.target.value)
-                    }
-                    placeholder="Enter question text"
-                  />
-                </Form.Group>
-
-                {/* <Form.Group className="mb-2">
-                  <Form.Label>Question Type</Form.Label>
-                  <Form.Select
-                    value={question.type}
-                    onChange={(e) =>
-                      handleQuestionChange(index, "type", e.target.value)
-                    }
-                  >
-                    <option>Multiple choice question</option>
-                    <option>True/false question</option>
-                    <option>Fill in a blank question</option>
-                  </Form.Select>
-                </Form.Group> */}
-
                 <div>
                   <Form.Group className="mb-2">
                     <Form.Label>Question Type</Form.Label>
@@ -402,67 +399,19 @@ export default function QuizEditor() {
                       value={selectedType}
                       onChange={handleTypeChange}
                     >
-                      <option value="multiple">Multiple choice question</option>
-                      <option value="truefalse">True/false question</option>
-                      <option value="fillblank">
+                      <option value="MULTIPLE-CHOICE">Multiple choice question</option>
+                      <option value="TRUE-FALSE">True/false question</option>
+                      <option value="FILL-IN">
                         Fill in a blank question
                       </option>
                     </Form.Select>
                   </Form.Group>
 
                   <div className="mt-4">
-                    {selectedType === "multiple" && <MultipleChoiceEditor />}
-                    {selectedType === "truefalse" && <TrueFalseEditor />}
-                    {selectedType === "fillblank" && <FillBlankEditor />}
+                    {selectedType === "MULTIPLE-CHOICE" && <MultipleChoiceEditor index={index} handleUpdateQuestion={handleUpdateQuestion} />}
+                    {selectedType === "TRUE-FALSE" && <TrueFalseEditor index={index} handleUpdateQuestion={handleUpdateQuestion} />}
+                    {selectedType === "FILL-IN" && <FillBlankEditor index={index} handleUpdateQuestion={handleUpdateQuestion} />}
                   </div>
-                </div>
-
-                {/* {question.type === "Multiple choice question" &&
-                  question.options.map((option: string, optIndex: number) => (
-                    <Form.Group key={optIndex} className="mb-2">
-                      <Form.Label>Choice {optIndex + 1}</Form.Label>
-                      <Form.Control
-                        type="text"
-                        value={option}
-                        onChange={(e) => {
-                          const updatedOptions = [...question.options];
-                          updatedOptions[optIndex] = e.target.value;
-                          handleQuestionChange(
-                            index,
-                            "options",
-                            updatedOptions
-                          );
-                        }}
-                      />
-                    </Form.Group> */}
-                {/* ))} */}
-
-                {/* <Form.Group className="mb-2">
-                  <Form.Label>Points</Form.Label>
-                  <Form.Control
-                    type="number"
-                    value={question.points}
-                    onChange={(e) =>
-                      handleQuestionChange(
-                        index,
-                        "points",
-                        Number(e.target.value)
-                      )
-                    }
-                  />
-                </Form.Group> */}
-
-                <div className="mt-3 d-flex justify-content-end gap-2">
-                  <Button
-                    variant="danger"
-                    onClick={() => handleDeleteQuestion(index)}
-                    className="me-2"
-                  >
-                    Cancel
-                  </Button>
-                  <Button variant="danger" onClick={handleSave}>
-                    Save
-                  </Button>
                 </div>
               </div>
             ))

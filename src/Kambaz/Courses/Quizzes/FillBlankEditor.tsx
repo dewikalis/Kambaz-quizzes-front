@@ -1,8 +1,9 @@
 import { Editor, EditorProvider } from "react-simple-wysiwyg";
 import { useState } from "react";
 import { Button, Form, Card } from "react-bootstrap";
+import { QuestionEditorProps } from "./QuizEditor";
 
-export default function FillInTheBlankEditor() {
+export default function FillInTheBlankEditor({ index, handleUpdateQuestion }: QuestionEditorProps) {
   const [title, setTitle] = useState<string>("");
   const [points, setPoints] = useState<number>(0);
   const [question, setQuestion] = useState<string>("");
@@ -23,7 +24,10 @@ export default function FillInTheBlankEditor() {
     setCorrectAnswers(correctAnswers.filter((_, i) => i !== index));
   };
 
-  const handleSave = () => alert("Question saved!");
+  const handleSave = () => {
+    alert("Question saved!");
+    handleUpdateQuestion(index, { title, points, question, correctAnswers, hasChoices: false, choices: [] })
+  }
   const handleCancel = () => {
     setTitle("");
     setPoints(0);

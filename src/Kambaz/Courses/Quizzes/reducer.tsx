@@ -3,14 +3,28 @@ import { v4 as uuidv4 } from "uuid";
 
 // Define the type for a single quiz
 interface Quiz {
-  _id: string;
-  title: string;
-  description: string;
-  points?: number;
-  due?: string;
-  from?: string;
-  until?: string;
-  // other optional fields
+  _id: string,
+  title: string,
+  description: string,
+  assignTo: string,
+  type: string,
+  assignmentGroup: string,
+  shuttleAnswer: boolean,
+  timeLimit: number,
+  multipleAttempts: boolean,
+  showCorrectAnswer: boolean,
+  accessCode: string,
+  oneQuestion: boolean,
+  webcamRequired: boolean,
+  lockQuestions: boolean,
+  published: boolean,
+  from: Date,
+  to: Date,
+  due: Date,
+  points: number,
+  questions: any[],
+  course: string,
+
 }
 
 // Define the state type that will hold an array of quizzes
