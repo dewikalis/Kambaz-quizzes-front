@@ -1,23 +1,34 @@
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { addQuiz, updateQuiz } from "./reducer";
 import MultipleChoiceEditor from "./MultipleChoiceEditor";
 import TrueFalseEditor from "./TrueFalseEditor";
 import FillBlankEditor from "./FillBlankEditor";
 import * as client from "./client";
 
-export type QuestionInfo = { title: string, points: number, question: string, correctAnswers: string[], hasChoices: boolean, choices: string[] }
-export type QuestionEditorProps = { index: number, handleUpdateQuestion: (index: number, questionInfo: QuestionInfo) => void }
+export type QuestionInfo = {
+  title: string;
+  points: number;
+  question: string;
+  correctAnswers: string[];
+  hasChoices: boolean;
+  choices: string[];
+};
+export type QuestionEditorProps = {
+  index: number;
+  handleUpdateQuestion: (index: number, questionInfo: QuestionInfo) => void;
+};
 
 export default function QuizEditor() {
   const { cid, qid } = useParams();
   const { quizId } = useParams();
   const dispatch = useDispatch();
-  const { quizzes } = useSelector((state: any) => state.quizReducer);
+  const { quizzes } = useSelector((state: any) => state.quizzesReducer);
+  const navigate = useNavigate();
 
-  let currentQuiz = quizzes.find((quiz: any) => quiz._id === qid);
+  const currentQuiz = quizzes.find((quiz: any) => quiz._id === qid);
 
   const [quizState, setQuizState] = useState<any>(
     currentQuiz || { title: "", description: "", questions: [] }
@@ -43,31 +54,55 @@ export default function QuizEditor() {
   const [questionType, setQuestionType] = useState("");
 
   const handleSave = async () => {
-    const response = await client.saveQuiz(
-      { title: quizTitle, description, assignTo, type, points, assignmentGroup, shuffleAnswer, timeLimit, multipleAttempts, correctAnswer, accessCode, oneQuestion, webcamRequired, lockQuestions, dueDate, availableDate, untilDate, questions: quizState?.questions, course: cid }
-    )
-
-    console.log("FRONTEND RESPONSE", response)
-    // if (currentQuiz) {
-    //   dispatch(updateQuiz(quizState));
-    // } else {
-    //   dispatch(addQuiz({ ...quizState, course: cid }));
-    // }
+    const newQuiz = {
+      title: quizTitle,
+      description,
+      assignTo,
+      type,
+      points,
+      assignmentGroup,
+      shuffleAnswer,
+      timeLimit,
+      multipleAttempts,
+      correctAnswer,
+      accessCode,
+      oneQuestion,
+      webcamRequired,
+      lockQuestions,
+      dueDate,
+      availableDate,
+      untilDate,
+      questions: quizState?.questions,
+      course: cid!,
+      published: false,
+      from: availableDate,
+      to: untilDate,
+      due: dueDate,
+      showCorrectAnswer: correctAnswer
+    };
+    await client.saveQuiz(newQuiz);
+    dispatch(addQuiz(newQuiz));
+    navigate(`/Kambaz/Courses/${cid}/Quizzes`);
   };
 
   const handleUpdateQuestion = (index: number, questionInfo: QuestionInfo) => {
-    const { title, points, question, correctAnswers } = questionInfo
+    const { title, points, question, correctAnswers } = questionInfo;
     const currentQuizQuestion = quizState.questions.find((_, i) => i === index);
-    const updatedQuizQuestion = Object.assign(currentQuizQuestion, { title, points, question, correctAnswers })
+    const updatedQuizQuestion = Object.assign(currentQuizQuestion, {
+      title,
+      points,
+      question,
+      correctAnswers,
+    });
     const updatedQuizQuestions = quizState.questions.map((value, i) => {
       if (i === index) {
-        return updatedQuizQuestion
+        return updatedQuizQuestion;
       }
-      return value
-    })
-    console.log("handleUpdateQuestion", index, questionInfo)
+      return value;
+    });
+    console.log("handleUpdateQuestion", index, questionInfo);
     // dispatch(updateQuiz({ ...quizState, updatedQuizQuestions }))
-  }
+  };
 
   const [activeTab, setActiveTab] = useState("details");
 
@@ -372,8 +407,9 @@ export default function QuizEditor() {
             </Form.Group>
 
             <div className="d-flex justify-content-end gap-2">
-              <Button variant="danger" onClick={handleSave}>Save</Button>
-
+              <Button variant="danger" onClick={handleSave}>
+                Save
+              </Button>
 
               <Link to={`/Kambaz/Courses/${cid}/Quizzes`}>
                 <Button variant="danger">Save and Publish</Button>
@@ -399,18 +435,33 @@ export default function QuizEditor() {
                       value={selectedType}
                       onChange={handleTypeChange}
                     >
-                      <option value="MULTIPLE-CHOICE">Multiple choice question</option>
-                      <option value="TRUE-FALSE">True/false question</option>
-                      <option value="FILL-IN">
-                        Fill in a blank question
+                      <option value="MULTIPLE-CHOICE">
+                        Multiple choice question
                       </option>
+                      <option value="TRUE-FALSE">True/false question</option>
+                      <option value="FILL-IN">Fill in a blank question</option>
                     </Form.Select>
                   </Form.Group>
 
                   <div className="mt-4">
-                    {selectedType === "MULTIPLE-CHOICE" && <MultipleChoiceEditor index={index} handleUpdateQuestion={handleUpdateQuestion} />}
-                    {selectedType === "TRUE-FALSE" && <TrueFalseEditor index={index} handleUpdateQuestion={handleUpdateQuestion} />}
-                    {selectedType === "FILL-IN" && <FillBlankEditor index={index} handleUpdateQuestion={handleUpdateQuestion} />}
+                    {selectedType === "MULTIPLE-CHOICE" && (
+                      <MultipleChoiceEditor
+                        index={index}
+                        handleUpdateQuestion={handleUpdateQuestion}
+                      />
+                    )}
+                    {selectedType === "TRUE-FALSE" && (
+                      <TrueFalseEditor
+                        index={index}
+                        handleUpdateQuestion={handleUpdateQuestion}
+                      />
+                    )}
+                    {selectedType === "FILL-IN" && (
+                      <FillBlankEditor
+                        index={index}
+                        handleUpdateQuestion={handleUpdateQuestion}
+                      />
+                    )}
                   </div>
                 </div>
               </div>

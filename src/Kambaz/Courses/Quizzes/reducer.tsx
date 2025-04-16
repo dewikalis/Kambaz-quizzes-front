@@ -9,7 +9,7 @@ interface Quiz {
   assignTo: string,
   type: string,
   assignmentGroup: string,
-  shuttleAnswer: boolean,
+  shuffleAnswer: boolean,
   timeLimit: number,
   multipleAttempts: boolean,
   showCorrectAnswer: boolean,
