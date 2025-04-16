@@ -4,12 +4,13 @@ import { useParams, Link } from "react-router";
 
 export default function QuizDetails() {
   const { cid } = useParams();
+  const { quizId } = useParams();
   return (
     <div
       id="wd-modules-controls"
       className="d-flex justify-content-center gap-2"
     >
-      <Link to={`/Kambaz/Courses/${cid}/Quizzes/QuizDetails`}>
+      <Link to={`/Kambaz/Courses/${cid}/Quizzes/${quizId}/preview`}>
         <Button
           variant="light"
           size="lg"

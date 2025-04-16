@@ -475,12 +475,12 @@ export default function QuizEditor() {
               + Add Question
             </Button>
 
-            <Link
+            {/* <Link
               to={`/Kambaz/Courses/${cid}/Quizzes/${quizId}/preview`}
               className="btn btn-secondary"
             >
               Preview Quiz
-            </Link>
+            </Link> */}
           </div>
 
           <div
