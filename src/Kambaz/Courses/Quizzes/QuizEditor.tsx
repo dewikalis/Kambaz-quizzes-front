@@ -43,7 +43,8 @@ export default function QuizEditor() {
   const shuffleAnswer = quizState?.shuffle || true;
   const timeLimit = quizState?.time || 20;
   const multipleAttempts = quizState?.attempts || false;
-  const correctAnswer = quizState?.answer || false;
+  const howManyAttempts = quizState?.howManyAttempts || 1;
+  const correctAnswer = quizState?.showCorrectAnswer || false;
   const accessCode = quizState?.code || "";
   const oneQuestion = quizState?.oneQuestion || true;
   const webcamRequired = quizState?.webcam || false;
@@ -64,6 +65,7 @@ export default function QuizEditor() {
       shuffleAnswer,
       timeLimit,
       multipleAttempts,
+      howManyAttempts,
       correctAnswer,
       accessCode,
       oneQuestion,
@@ -300,6 +302,24 @@ export default function QuizEditor() {
               />
               <Form.Label>Multiple Attempts</Form.Label>
             </Form.Group>
+
+            {quizState.attempts && (
+  <Form.Group className="mb-3" controlId="wd-how-many-attempts">
+    <Form.Label>How Many Attempts</Form.Label>
+    <Form.Control
+      type="number"
+      value={howManyAttempts}
+      onChange={(e) =>
+        setQuizState((prev: any) => ({
+          ...prev,
+          howManyAttempts: e.target.value,
+        }))
+      }
+      placeholder="Enter number of attempts"
+      min={1}
+    />
+  </Form.Group>
+)}
 
             <Form.Group className="mb-3" controlId="wd-points">
               <Form.Check

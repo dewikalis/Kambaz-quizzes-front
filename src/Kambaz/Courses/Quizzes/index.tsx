@@ -13,7 +13,7 @@ const getAvailabilityStatus = (availableDate: string, dueDate: string) => {
   const currentDate = new Date();
   const availableDateObj = new Date(availableDate);
   const dueDateObj = new Date(dueDate);
-
+ 
   // If the current date is after the available date
   if (currentDate > availableDateObj) {
     if (currentDate <= dueDateObj) {
@@ -22,8 +22,17 @@ const getAvailabilityStatus = (availableDate: string, dueDate: string) => {
       return "Closed";
     }
   } else {
-    return `Not available until ${availableDate}`;
+    return `Not available until ${availableDateObj.toLocaleString("en-US", {year: "numeric", month: "long", day: "2-digit"})}`;
   }
+};
+
+const formatDate = (dateStr: string) => {
+  if (!dateStr) return "None";
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 };
 
 export default function Quizzes() {
@@ -45,6 +54,7 @@ export default function Quizzes() {
   }, [cid, dispatch])
 
   console.log(JSON.stringify(quizzes, null, 2))
+
 
   return (
     <div id="wd-quizzes" className="container mt-3">
@@ -87,7 +97,7 @@ export default function Quizzes() {
     <div className="mb-2">
                     {isFaculty ? (
                       <a
-                        href={`#/Kambaz/Courses/${cid}/Quizzes/${quizzes._id}`}
+                        href={`#/Kambaz/Courses/${cid}/Quizzes/${quizzes._id}/QuizDetails`}
                         className="wd-assignment-link text-decoration-none text-black"
                       >
                         <strong>{quizzes.title}</strong>
@@ -103,7 +113,7 @@ export default function Quizzes() {
                       </span>
                       <span >
                         {" "}
-                       | <b>Due </b> {quizzes.due} | {quizzes.points}
+                       | <b>Due </b> {formatDate(quizzes.due)} | {quizzes.points}
                         pts | {quizzes.questions.length} Questions
                       </span>
                     </div>
