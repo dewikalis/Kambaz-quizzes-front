@@ -12,6 +12,7 @@ interface Quiz {
   shuffleAnswer: boolean,
   timeLimit: number,
   multipleAttempts: boolean,
+  howManyAttempts: number,
   showCorrectAnswer: boolean,
   accessCode: string,
   oneQuestion: boolean,
