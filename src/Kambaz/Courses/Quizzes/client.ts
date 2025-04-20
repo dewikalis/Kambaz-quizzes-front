@@ -13,3 +13,11 @@ export const saveQuiz = async (quizInfo: any) => {
   const { data } = await axiosWithCredentials.post(`${QUIZZES_API}`, quizInfo);
   return data
 }
+
+export const updateQuiz = async (quiz: any) => {
+  const { data } = await axiosWithCredentials.put(
+    `${QUIZZES_API}/QuizEditor/${quiz._id}`,
+    quiz
+  );
+  return data;
+};

@@ -59,7 +59,7 @@ export default function Quizzes() {
   return (
     <div id="wd-quizzes" className="container mt-3">
          <div className="mb-3 d-flex justify-content-end">
-      <Link to={`/Kambaz/Courses/${cid}/Quizzes/QuizEditor`}>
+      <Link to={`/Kambaz/Courses/${cid}/Quizzes/New`}>
         <Button
           variant="danger"
           size="lg"

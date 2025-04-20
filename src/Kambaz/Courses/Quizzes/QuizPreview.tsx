@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 type Question = {
   id: string;
@@ -9,30 +10,29 @@ type Question = {
   correctAnswer: string;
 };
 
-const mockQuiz: Question[] = [
-  {
-    id: "q1",
-    question: "What is the capital of France?",
-    choices: ["Paris", "Rome", "Berlin", "Madrid"],
-    correctAnswer: "Paris",
-  },
-  {
-    id: "q2",
-    question: "Which planet is known as the Red Planet?",
-    choices: ["Earth", "Venus", "Mars", "Jupiter"],
-    correctAnswer: "Mars",
-  },
-];
-
 export default function QuizPreview() {
   const navigate = useNavigate();
-  const { cid, quizId } = useParams();
+  const { quizId, cid, qid } = useParams();
   const [answers, setAnswers] = useState<{ [key: string]: string }>({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState<number | null>(null);
   const [currentQIndex, setCurrentQIndex] = useState(0);
 
-  const currentQuestion = mockQuiz[currentQIndex];
+  const { quizzes } = useSelector((state: any) => state.quizzesReducer);
+  const singleQuiz = quizzes.find((quiz: any) => quiz._id === qid);
+  const questionsList = singleQuiz?.questions || [];
+
+  // 🔁 Convert backend format to frontend format
+  const quizQuestions: Question[] = useMemo(() => {
+    return questionsList.map((q: any, index: number) => ({
+      id: `q${index}`,
+      question: q.title || `Question ${index + 1}`,
+      choices: q.answers || [],
+      correctAnswer: q.answers[q.correctOption] || "",
+    }));
+  }, [questionsList]);
+
+  const currentQuestion = quizQuestions[currentQIndex];
 
   useEffect(() => {
     const saved = localStorage.getItem(`quiz-preview-${quizId}`);
@@ -48,7 +48,7 @@ export default function QuizPreview() {
 
   const handleSubmit = () => {
     let correct = 0;
-    mockQuiz.forEach((q) => {
+    quizQuestions.forEach((q) => {
       if (answers[q.id] === q.correctAnswer) correct++;
     });
     setScore(correct);
@@ -57,7 +57,7 @@ export default function QuizPreview() {
   };
 
   const goToNext = () => {
-    if (currentQIndex < mockQuiz.length - 1) {
+    if (currentQIndex < quizQuestions.length - 1) {
       setCurrentQIndex((prev) => prev + 1);
     }
   };
@@ -68,13 +68,17 @@ export default function QuizPreview() {
     }
   };
 
+  if (!quizQuestions.length) {
+    return <div className="text-center mt-10">No questions available.</div>;
+  }
+
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-6 bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-bold border-b pb-3">Quiz Preview</h2>
 
       <div className="border border-gray-200 p-4 rounded-md bg-gray-50">
         <h3 className="text-lg font-medium mb-4">
-          Question {currentQIndex + 1} of {mockQuiz.length}
+          Question {currentQIndex + 1} of {quizQuestions.length}
         </h3>
         <p className="mb-4 font-semibold">{currentQuestion.question}</p>
 
@@ -125,7 +129,7 @@ export default function QuizPreview() {
           <div />
         )}
 
-        {currentQIndex < mockQuiz.length - 1 ? (
+        {currentQIndex < quizQuestions.length - 1 ? (
           <Button onClick={goToNext} disabled={!answers[currentQuestion.id]}>
             Next
           </Button>
@@ -142,7 +146,7 @@ export default function QuizPreview() {
 
       {submitted && (
         <div className="text-xl font-semibold text-center text-indigo-700 pt-4">
-          Score: {score} / {mockQuiz.length}
+          Score: {score} / {quizQuestions.length}
         </div>
       )}
 
