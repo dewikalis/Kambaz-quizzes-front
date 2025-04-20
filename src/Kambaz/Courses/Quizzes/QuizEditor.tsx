@@ -23,7 +23,7 @@ export type QuestionEditorProps = {
 
 export default function QuizEditor() {
   const { cid, qid } = useParams();
-  const { quizId } = useParams();
+  // const { quizId } = useParams();
   const dispatch = useDispatch();
   const { quizzes } = useSelector((state: any) => state.quizzesReducer);
   const navigate = useNavigate();
@@ -34,6 +34,7 @@ export default function QuizEditor() {
     currentQuiz || { title: "", description: "", questions: [] }
   );
 
+  console.log("Current quiz:", currentQuiz);
   const quizTitle = quizState?.title || "";
   const description = quizState?.description || "";
   const assignTo = quizState?.assignTo || 100;
@@ -82,9 +83,17 @@ export default function QuizEditor() {
       due: dueDate,
       showCorrectAnswer: correctAnswer
     };
-    await client.saveQuiz(newQuiz);
-    dispatch(addQuiz(newQuiz));
-    navigate(`/Kambaz/Courses/${cid}/Quizzes`);
+    console.log("QID:", qid)
+    if (qid === "New") {
+      await client.saveQuiz(newQuiz);
+      dispatch(addQuiz(newQuiz));
+      navigate(`/Kambaz/Courses/${cid}/Quizzes`);
+    } else {
+      await client.updateQuiz(newQuiz);
+      dispatch(updateQuiz({_id: qid , ...newQuiz}));
+      navigate(`/Kambaz/Courses/${cid}/Quizzes`);
+    }
+   
   };
 
   const handleUpdateQuestion = (index: number, questionInfo: QuestionInfo) => {
@@ -147,6 +156,8 @@ export default function QuizEditor() {
     );
     setQuizState((prev: any) => ({ ...prev, questions: updatedQuestions }));
   };
+
+
 
   return (
     <div id="wd-quiz-editor">

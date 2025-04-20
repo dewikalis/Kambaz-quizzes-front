@@ -9,6 +9,7 @@ export default function QuizDetails() {
   const { quizzes } = useSelector((state: any) => state.quizzesReducer)
 
   const singleQuiz = quizzes.find((quiz: any)=> quiz._id === qid);
+  console.log(singleQuiz)
   
   const formatDate = (dateStr?: string) => {
     if (!dateStr || isNaN(Date.parse(dateStr))) return "None";
@@ -42,7 +43,7 @@ export default function QuizDetails() {
         </Button>
       </Link>
 
-      <Link to={`/Kambaz/Courses/${cid}/Quizzes/QuizEditor`}>
+      <Link to={`/Kambaz/Courses/${cid}/Quizzes/${singleQuiz._id}`}>
         <Button
           variant="light"
           size="lg"
