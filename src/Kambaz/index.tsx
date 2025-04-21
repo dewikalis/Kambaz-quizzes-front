@@ -11,6 +11,7 @@ import Dashboard from "./Dashboard";
 import Session from "./Account/Session";
 import * as userClient from "./Account/client";
 import * as courseClient from "./Courses/client";
+import Deliverables from "./Deliverables";
 
 type Course = {
   _id: any,
@@ -146,6 +147,7 @@ export default function Kambaz() {
             <Route path="/People" element={<PeopleTable />} />
             <Route path="/Calendar" element={<h1>Calendar</h1>} />
             <Route path="/Inbox" element={<h1>Inbox</h1>} />
+            <Route path="/Deliverables" element={<Deliverables />} />
           </Routes>
         </div>
       </div>
