@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
-import { useParams, Link, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import * as client from "./client"
 import { useDispatch, useSelector } from "react-redux";
 import { setQuizzes } from "./reducer";
