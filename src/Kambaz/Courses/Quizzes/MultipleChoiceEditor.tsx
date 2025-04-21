@@ -21,9 +21,7 @@ export default function MultipleChoiceEditor({ index, handleUpdateQuestion }: Qu
     setChoices(choices.filter((_, i) => i !== index));
 
   const handleSave = () => {
-    alert("Question saved!");
-    handleUpdateQuestion(index, { title, points, question, correctAnswers: [correctChoice], hasChoices: true, choices })
-
+    handleUpdateQuestion(index, { title, points, description: "", answers: [correctChoice], choices, type: "MULTIPLE-CHOICE" })
   };
   const handleCancel = () => {
     setTitle("");

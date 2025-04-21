@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import * as client from "./client";
 
 type Question = {
   id: string;
@@ -92,15 +93,14 @@ export default function QuizPreview() {
             return (
               <div key={choice}>
                 <label
-                  className={`flex items-center p-2 cursor-pointer transition ${
-                    submitted
-                      ? isCorrect
-                        ? "bg-green-100"
-                        : isIncorrect
+                  className={`flex items-center p-2 cursor-pointer transition ${submitted
+                    ? isCorrect
+                      ? "bg-green-100"
+                      : isIncorrect
                         ? "bg-red-100"
                         : "bg-white"
-                      : "hover:bg-gray-100"
-                  }`}
+                    : "hover:bg-gray-100"
+                    }`}
                 >
                   <input
                     type="radio"

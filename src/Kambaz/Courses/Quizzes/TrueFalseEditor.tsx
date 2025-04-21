@@ -11,7 +11,7 @@ export default function TrueFalseQuestionEditor({ index, handleUpdateQuestion }:
 
   const handleSave = () => {
     alert("Question saved!");
-    handleUpdateQuestion(index, { title, points, question, correctAnswers: [correctAnswer], hasChoices: false, choices: [] })
+    handleUpdateQuestion(index, { title, points, description: "", answers: [correctAnswer], choices: ["true", "false"], type: "FILL-IN" })
   }
   const handleCancel = () => {
     setTitle("");

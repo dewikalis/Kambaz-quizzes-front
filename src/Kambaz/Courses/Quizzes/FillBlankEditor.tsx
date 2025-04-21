@@ -26,7 +26,7 @@ export default function FillInTheBlankEditor({ index, handleUpdateQuestion }: Qu
 
   const handleSave = () => {
     alert("Question saved!");
-    handleUpdateQuestion(index, { title, points, question, correctAnswers, hasChoices: false, choices: [] })
+    handleUpdateQuestion(index, { title, points, description: "", answers: correctAnswers, choices: [question], type: "FILL-IN" })
   }
   const handleCancel = () => {
     setTitle("");

@@ -16,8 +16,16 @@ export const saveQuiz = async (quizInfo: any) => {
 
 export const updateQuiz = async (quiz: any) => {
   const { data } = await axiosWithCredentials.put(
-    `${QUIZZES_API}/QuizEditor/${quiz._id}`,
+    `${QUIZZES_API}/${quiz._id}`,
     quiz
   );
   return data;
 };
+
+export const takeQuiz = async (quiz: any) => {
+  const { data } = await axiosWithCredentials.post(
+    `${QUIZZES_API}/${quiz._id}`,
+    quiz
+  )
+  return data
+}

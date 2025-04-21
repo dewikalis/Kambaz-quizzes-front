@@ -1,20 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { addQuiz, updateQuiz } from "./reducer";
+import { addQuiz, setQuizzes, updateQuiz } from "./reducer";
 import MultipleChoiceEditor from "./MultipleChoiceEditor";
 import TrueFalseEditor from "./TrueFalseEditor";
 import FillBlankEditor from "./FillBlankEditor";
 import * as client from "./client";
 
 export type QuestionInfo = {
-  title: string;
-  points: number;
-  question: string;
-  correctAnswers: string[];
-  hasChoices: boolean;
-  choices: string[];
+  title: string,
+  description: string,
+  type: string,
+  points: number,
+  answers: string[],
+  choices: string[]
 };
 export type QuestionEditorProps = {
   index: number;
@@ -29,38 +29,49 @@ export default function QuizEditor() {
   const navigate = useNavigate();
 
   const currentQuiz = quizzes.find((quiz: any) => quiz._id === qid);
+  const [renderedOnce, setRenderedOnce] = useState(false);
+  console.log("CURRENT QUIZ", currentQuiz)
 
-  const [quizState, setQuizState] = useState<any>(
-    currentQuiz || { title: "", description: "", questions: [] }
-  );
+  // const [quizState, setQuizState] = useState<any>(
+  //   currentQuiz || { title: "", description: "", questions: [] }
+  // );
 
-  console.log("Current quiz:", currentQuiz);
-  const quizTitle = quizState?.title || "";
-  const description = quizState?.description || "";
-  const assignTo = quizState?.assignTo || 100;
-  const type = quizState?.type || "";
-  const points = quizState?.points || 100;
-  const assignmentGroup = quizState?.group || "quizzes";
-  const shuffleAnswer = quizState?.shuffle || true;
-  const timeLimit = quizState?.time || 20;
-  const multipleAttempts = quizState?.attempts || false;
-  const howManyAttempts = quizState?.howManyAttempts || 1;
-  const correctAnswer = quizState?.showCorrectAnswer || false;
-  const accessCode = quizState?.code || "";
-  const oneQuestion = quizState?.oneQuestion || true;
-  const webcamRequired = quizState?.webcam || false;
-  const lockQuestions = quizState?.lock || false;
-  const dueDate = quizState?.due || "";
-  const availableDate = quizState?.from || "";
-  const untilDate = quizState?.until || "";
-  const [questionType, setQuestionType] = useState("");
+  const quizTitle = currentQuiz?.title || "";
+  const description = currentQuiz?.description || "";
+  const assignTo = currentQuiz?.assignTo || 100;
+  const points = currentQuiz?.points || 100;
+  const assignmentGroup = currentQuiz?.group || "quizzes";
+  const shuffleAnswer = currentQuiz?.shuffle || true;
+  const timeLimit = currentQuiz?.time || 20;
+  const multipleAttempts = currentQuiz?.attempts || false;
+  const howManyAttempts = currentQuiz?.howManyAttempts || 1;
+  const correctAnswer = currentQuiz?.showCorrectAnswer || false;
+  const accessCode = currentQuiz?.code || "";
+  const oneQuestion = currentQuiz?.oneQuestion || true;
+  const webcamRequired = currentQuiz?.webcam || false;
+  const lockQuestions = currentQuiz?.lock || false;
+  const dueDate = currentQuiz?.due || "";
+  const availableDate = currentQuiz?.from || "";
+  const untilDate = currentQuiz?.until || "";
+  const questionType = currentQuiz?.questionType || "";
+
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      if (renderedOnce) { return }
+      const quizzes = await client.getQuizzes(cid!)
+      dispatch(setQuizzes(quizzes));
+      setRenderedOnce(true);
+    };
+
+
+    fetchQuizzes();
+  }, [cid, dispatch, renderedOnce]);
 
   const handleSave = async () => {
     const newQuiz = {
       title: quizTitle,
       description,
       assignTo,
-      type,
       points,
       assignmentGroup,
       shuffleAnswer,
@@ -75,7 +86,7 @@ export default function QuizEditor() {
       dueDate,
       availableDate,
       untilDate,
-      questions: quizState?.questions,
+      questions: currentQuiz?.questions,
       course: cid!,
       published: false,
       from: availableDate,
@@ -83,36 +94,25 @@ export default function QuizEditor() {
       due: dueDate,
       showCorrectAnswer: correctAnswer
     };
-    console.log("QID:", qid)
     if (qid === "New") {
       await client.saveQuiz(newQuiz);
       dispatch(addQuiz(newQuiz));
       navigate(`/Kambaz/Courses/${cid}/Quizzes`);
     } else {
-      await client.updateQuiz(newQuiz);
-      dispatch(updateQuiz({_id: qid , ...newQuiz}));
+      const quiz = { _id: qid!, ...newQuiz }
+      await client.updateQuiz(quiz);
+      dispatch(updateQuiz(quiz));
       navigate(`/Kambaz/Courses/${cid}/Quizzes`);
     }
-   
+
   };
 
-  const handleUpdateQuestion = (index: number, questionInfo: QuestionInfo) => {
-    const { title, points, question, correctAnswers } = questionInfo;
-    const currentQuizQuestion = quizState.questions.find((_, i) => i === index);
-    const updatedQuizQuestion = Object.assign(currentQuizQuestion, {
-      title,
-      points,
-      question,
-      correctAnswers,
-    });
-    const updatedQuizQuestions = quizState.questions.map((value, i) => {
-      if (i === index) {
-        return updatedQuizQuestion;
-      }
-      return value;
-    });
-    console.log("handleUpdateQuestion", index, questionInfo);
-    // dispatch(updateQuiz({ ...quizState, updatedQuizQuestions }))
+  const handleUpdateQuestion = async (index: number, questionInfo: QuestionInfo) => {
+    const updatedQuizQuestions = (currentQuiz?.questions || []).map((value, i) =>
+      i === index ? { ...value, ...questionInfo } : value
+    );
+    await client.updateQuiz({ ...currentQuiz, questions: updatedQuizQuestions });
+    dispatch(updateQuiz({ ...currentQuiz, questions: updatedQuizQuestions }));
   };
 
   const [activeTab, setActiveTab] = useState("details");
@@ -121,28 +121,21 @@ export default function QuizEditor() {
     setActiveTab(tab);
   };
 
-  const handleAddQuestion = () => {
+  const handleAddQuestion = async () => {
     const newQuestion = {
-      id: Date.now(),
+      _id: Date.now(),
       type: "MULTIPLE-CHOICE",
       title: "",
       description: "",
       answers: ["", "", "", ""],
-      correctOption: 0,
       points: 1,
+      choices: []
     };
-    setQuizState((prev: any) => ({
-      ...prev,
-      questions: [...prev.questions, newQuestion],
-    }));
+    const x = await client.updateQuiz({ _id: qid!, questions: [...(currentQuiz?.questions || []), newQuestion] })
+    dispatch(updateQuiz({ _id: qid!, questions: [...(currentQuiz?.questions || []), newQuestion] }));
+    alert(JSON.stringify(x, null, 2) + qid);
   };
 
-  const handleQuestionChange = (index: number, field: string, value: any) => {
-    const updatedQuestions = quizState.questions.map((q: any, i: number) =>
-      i === index ? { ...q, [field]: value } : q
-    );
-    setQuizState((prev: any) => ({ ...prev, questions: updatedQuestions }));
-  };
 
   const [selectedType, setSelectedType] = useState("MULTIPLE-CHOICE");
 
@@ -154,15 +147,14 @@ export default function QuizEditor() {
     const updatedQuestions = quizState.questions.filter(
       (_: any, i: number) => i !== index
     );
-    setQuizState((prev: any) => ({ ...prev, questions: updatedQuestions }));
+    // setQuizState((prev: any) => ({ ...prev, questions: updatedQuestions }));
   };
-
 
 
   return (
     <div id="wd-quiz-editor">
       <div id="wd-quiz-buttons" className="d-flex justify-content-center gap-2">
-        <Link to={`/Kambaz/Courses/${cid}/Quizzes/QuizDetails`}>
+        <Link to={`/Kambaz/Courses/${cid}/Quizzes/${qid}`}>
           <Button
             variant="light"
             size="lg"
@@ -174,7 +166,7 @@ export default function QuizEditor() {
           </Button>
         </Link>
 
-        <Link to={`/Kambaz/Courses/${cid}/Quizzes/QuizQuestions`}>
+        <Link to={`/Kambaz/Courses/${cid}/Quizzes/${qid}/QuizQuestions`}>
           <Button
             variant="light"
             size="lg"
@@ -196,10 +188,8 @@ export default function QuizEditor() {
                 type="text"
                 value={quizTitle}
                 onChange={(e) =>
-                  setQuizState((prev: any) => ({
-                    ...prev,
-                    title: e.target.value,
-                  }))
+                  dispatch(updateQuiz({ ...currentQuiz, title: e.target.value }))
+
                 }
                 placeholder="Enter quiz name"
               />
@@ -213,10 +203,8 @@ export default function QuizEditor() {
                 rows={3}
                 value={description}
                 onChange={(e) =>
-                  setQuizState((prev: any) => ({
-                    ...prev,
-                    description: e.target.value,
-                  }))
+                  dispatch(updateQuiz({ ...currentQuiz, description: e.target.value }))
+
                 }
                 placeholder="Enter quiz description"
               />
@@ -226,12 +214,9 @@ export default function QuizEditor() {
               <Form.Label>Quiz Type</Form.Label>
               <Form.Control
                 as="select"
-                value={quizState?.type || ""}
+                value={currentQuiz?.questionType || ""}
                 onChange={(e) =>
-                  setQuizState((prev: any) => ({
-                    ...prev,
-                    type: e.target.value,
-                  }))
+                  dispatch(updateQuiz({ ...currentQuiz, type: e.target.value }))
                 }
               >
                 <option value="Graded Quiz">Graded Quiz</option>
@@ -247,10 +232,7 @@ export default function QuizEditor() {
                 type="number"
                 value={points}
                 onChange={(e) =>
-                  setQuizState((prev: any) => ({
-                    ...prev,
-                    points: e.target.value,
-                  }))
+                  dispatch(updateQuiz({ ...currentQuiz, points: e.target.value }))
                 }
                 placeholder="Enter points"
               />
@@ -260,12 +242,9 @@ export default function QuizEditor() {
               <Form.Label>Assignment Group</Form.Label>
               <Form.Control
                 as="select"
-                value={quizState?.group || ""}
+                value={currentQuiz?.group || ""}
                 onChange={(e) =>
-                  setQuizState((prev: any) => ({
-                    ...prev,
-                    group: e.target.value,
-                  }))
+                  dispatch(updateQuiz({ ...currentQuiz, group: e.target.value }))
                 }
               >
                 <option value="Quizzes">Quizzes</option>
@@ -278,9 +257,9 @@ export default function QuizEditor() {
             <Form.Group className="mb-3" controlId="wd-shuffle-answers">
               <Form.Check
                 type="checkbox"
-                checked={quizState.shuffle}
+                checked={currentQuiz?.shuffle}
                 onChange={(e) =>
-                  setQuizState({ ...quizState, shuffle: e.target.checked })
+                  dispatch(updateQuiz({ ...currentQuiz, shuffle: e.target.value }))
                 }
                 inline
               />
@@ -293,10 +272,7 @@ export default function QuizEditor() {
                 type="number"
                 value={timeLimit}
                 onChange={(e) =>
-                  setQuizState((prev: any) => ({
-                    ...prev,
-                    time: e.target.value,
-                  }))
+                  dispatch(updateQuiz({ ...currentQuiz, time: e.target.value }))
                 }
                 placeholder="Enter points"
               />
@@ -305,39 +281,36 @@ export default function QuizEditor() {
             <Form.Group className="mb-3" controlId="wd-points">
               <Form.Check
                 type="checkbox"
-                checked={quizState.attempts}
+                checked={currentQuiz?.attempts}
                 onChange={(e) =>
-                  setQuizState({ ...quizState, attempts: e.target.checked })
+                  dispatch(updateQuiz({ ...currentQuiz, attempts: e.target.value }))
                 }
                 inline
               />
               <Form.Label>Multiple Attempts</Form.Label>
             </Form.Group>
 
-            {quizState.attempts && (
-  <Form.Group className="mb-3" controlId="wd-how-many-attempts">
-    <Form.Label>How Many Attempts</Form.Label>
-    <Form.Control
-      type="number"
-      value={howManyAttempts}
-      onChange={(e) =>
-        setQuizState((prev: any) => ({
-          ...prev,
-          howManyAttempts: e.target.value,
-        }))
-      }
-      placeholder="Enter number of attempts"
-      min={1}
-    />
-  </Form.Group>
-)}
+            {currentQuiz?.attempts && (
+              <Form.Group className="mb-3" controlId="wd-how-many-attempts">
+                <Form.Label>How Many Attempts</Form.Label>
+                <Form.Control
+                  type="number"
+                  value={howManyAttempts}
+                  onChange={(e) =>
+                    dispatch(updateQuiz({ ...currentQuiz, howManyAttempts: e.target.value }))
+                  }
+                  placeholder="Enter number of attempts"
+                  min={1}
+                />
+              </Form.Group>
+            )}
 
             <Form.Group className="mb-3" controlId="wd-points">
               <Form.Check
                 type="checkbox"
-                checked={quizState.answers}
+                checked={currentQuiz?.answers}
                 onChange={(e) =>
-                  setQuizState({ ...quizState, answers: e.target.checked })
+                  dispatch(updateQuiz({ ...currentQuiz, answers: e.target.value }))
                 }
                 inline
               />
@@ -350,10 +323,7 @@ export default function QuizEditor() {
                 type="text"
                 value={accessCode}
                 onChange={(e) =>
-                  setQuizState((prev: any) => ({
-                    ...prev,
-                    title: e.target.value,
-                  }))
+                  dispatch(updateQuiz({ ...currentQuiz, title: e.target.value }))
                 }
                 placeholder="Enter acess code"
               />
@@ -362,9 +332,9 @@ export default function QuizEditor() {
             <Form.Group className="mb-3" controlId="wd-points">
               <Form.Check
                 type="checkbox"
-                checked={quizState.oneQuestion}
+                checked={currentQuiz?.oneQuestion}
                 onChange={(e) =>
-                  setQuizState({ ...quizState, oneQuestion: e.target.checked })
+                  dispatch(updateQuiz({ ...currentQuiz, oneQuestion: e.target.value }))
                 }
                 inline
               />
@@ -374,9 +344,9 @@ export default function QuizEditor() {
             <Form.Group className="mb-3" controlId="wd-points">
               <Form.Check
                 type="checkbox"
-                checked={quizState.webcam}
+                checked={currentQuiz?.webcam}
                 onChange={(e) =>
-                  setQuizState({ ...quizState, webcam: e.target.checked })
+                  dispatch(updateQuiz({ ...currentQuiz, webcam: e.target.value }))
                 }
                 inline
               />
@@ -386,9 +356,9 @@ export default function QuizEditor() {
             <Form.Group className="mb-3" controlId="wd-points">
               <Form.Check
                 type="checkbox"
-                checked={quizState.lock}
+                checked={currentQuiz?.lock}
                 onChange={(e) =>
-                  setQuizState({ ...quizState, lock: e.target.checked })
+                  dispatch(updateQuiz({ ...currentQuiz, lock: e.target.value }))
                 }
                 inline
               />
@@ -401,10 +371,7 @@ export default function QuizEditor() {
                 type="date"
                 value={dueDate}
                 onChange={(e) =>
-                  setQuizState((prev: any) => ({
-                    ...prev,
-                    due: e.target.value,
-                  }))
+                  dispatch(updateQuiz({ ...currentQuiz, due: e.target.value }))
                 }
               />
             </Form.Group>
@@ -415,10 +382,7 @@ export default function QuizEditor() {
                 type="date"
                 value={availableDate}
                 onChange={(e) =>
-                  setQuizState((prev: any) => ({
-                    ...prev,
-                    from: e.target.value,
-                  }))
+                  dispatch(updateQuiz({ ...currentQuiz, from: e.target.value }))
                 }
               />
             </Form.Group>
@@ -429,10 +393,7 @@ export default function QuizEditor() {
                 type="date"
                 value={untilDate}
                 onChange={(e) =>
-                  setQuizState((prev: any) => ({
-                    ...prev,
-                    until: e.target.value,
-                  }))
+                  dispatch(updateQuiz({ ...currentQuiz, until: e.target.value }))
                 }
               />
             </Form.Group>
@@ -456,47 +417,53 @@ export default function QuizEditor() {
         <div id="wd-quiz-questions">
           <h3>Questions</h3>
 
-          {quizState.questions.length > 0 ? (
-            quizState.questions.map((question: any, index: number) => (
-              <div key={question.id} className="mb-3 p-3 border rounded">
-                <div>
-                  <Form.Group className="mb-2">
-                    <Form.Label>Question Type</Form.Label>
-                    <Form.Select
-                      value={selectedType}
-                      onChange={handleTypeChange}
-                    >
-                      <option value="MULTIPLE-CHOICE">
-                        Multiple choice question
-                      </option>
-                      <option value="TRUE-FALSE">True/false question</option>
-                      <option value="FILL-IN">Fill in a blank question</option>
-                    </Form.Select>
-                  </Form.Group>
+          {currentQuiz?.questions?.length > 0 ? (
+            currentQuiz.questions.map((question: any, index: number) => {
+              console.log(question)
+              return (
+                <div key={question._id} className="mb-3 p-3 border rounded">
+                  <div>
+                    hello
+                    <Form.Group className="mb-2">
+                      <Form.Label>Question Type</Form.Label>
+                      <Form.Select
+                        value={selectedType}
+                        onChange={handleTypeChange}
+                      >
+                        <option key={"MULTIPLE-CHOICE"} value="MULTIPLE-CHOICE">
+                          Multiple choice question
+                        </option>
+                        <option key={"TRUE-FALSE"} value="TRUE-FALSE">True/false question</option>
+                        <option key={"FILL-IN"} value="FILL-IN">Fill in a blank question</option>
+                      </Form.Select>
+                    </Form.Group>
 
-                  <div className="mt-4">
-                    {selectedType === "MULTIPLE-CHOICE" && (
-                      <MultipleChoiceEditor
-                        index={index}
-                        handleUpdateQuestion={handleUpdateQuestion}
-                      />
-                    )}
-                    {selectedType === "TRUE-FALSE" && (
-                      <TrueFalseEditor
-                        index={index}
-                        handleUpdateQuestion={handleUpdateQuestion}
-                      />
-                    )}
-                    {selectedType === "FILL-IN" && (
-                      <FillBlankEditor
-                        index={index}
-                        handleUpdateQuestion={handleUpdateQuestion}
-                      />
-                    )}
+                    <div className="mt-4">
+                      {selectedType === "MULTIPLE-CHOICE" && (
+                        <MultipleChoiceEditor
+                          index={index}
+                          handleUpdateQuestion={handleUpdateQuestion}
+                        />
+                      )}
+                      {selectedType === "TRUE-FALSE" && (
+                        <TrueFalseEditor
+                          index={index}
+                          handleUpdateQuestion={handleUpdateQuestion}
+                        />
+                      )}
+                      {selectedType === "FILL-IN" && (
+                        <FillBlankEditor
+                          index={index}
+                          handleUpdateQuestion={handleUpdateQuestion}
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+
+              )
+            }
+            )
           ) : (
             <p>No questions added yet.</p>
           )}

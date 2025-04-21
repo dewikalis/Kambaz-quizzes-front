@@ -7,7 +7,6 @@ interface Quiz {
   title: string,
   description: string,
   assignTo: string,
-  type: string,
   assignmentGroup: string,
   shuffleAnswer: boolean,
   timeLimit: number,
@@ -60,8 +59,9 @@ const quizzesSlice = createSlice({
     },
 
     // Updating an existing quiz
-    updateQuiz: (state, action: PayloadAction<Quiz>) => {
+    updateQuiz: (state, action: PayloadAction<Partial<Quiz>>) => {
       const updatedQuiz = action.payload;
+      console.log("FROM REDUX", updatedQuiz)
 
       // Update only the quiz data, without overwriting _id
       state.quizzes = state.quizzes.map((quiz) =>

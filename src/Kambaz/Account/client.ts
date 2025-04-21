@@ -15,9 +15,7 @@ export const createCourse = async (course: any) => {
 };
 
 export const signin = async (credentials: any) => {
-  console.log("FRONTEND SIGNING IN")
   const response = await axiosWithCredentials.post(`${USERS_API}/signin`, credentials);
-  console.log("FRONTEND SIGNING IN RESPONSE", response)
   return response.data;
 };
 
@@ -68,7 +66,7 @@ export const findUserById = async (id: string) => {
 };
 
 export const deleteUser = async (userId: string) => {
-  const response = await axios.delete( `${USERS_API}/${userId}` );
+  const response = await axios.delete(`${USERS_API}/${userId}`);
   return response.data;
 };
 
@@ -90,4 +88,3 @@ export const unenrollFromCourse = async (userId: string, courseId: string) => {
   const response = await axiosWithCredentials.delete(`${USERS_API}/${userId}/courses/${courseId}`);
   return response.data;
 };
- 
