@@ -37,9 +37,6 @@ export default function Quizzes() {
   const { cid } = useParams();
   const dispatch = useDispatch();
   const { quizzes } = useSelector((state: any) => state.quizzesReducer)
-  const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const isFaculty = currentUser?.role === "FACULTY";
-
 
   useEffect(() => {
     const fetchQuizzes = async () => {
