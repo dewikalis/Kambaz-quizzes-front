@@ -30,11 +30,6 @@ export default function QuizEditor() {
 
   const currentQuiz = quizzes.find((quiz: any) => quiz._id === qid);
   const [renderedOnce, setRenderedOnce] = useState(false);
-  console.log("CURRENT QUIZ", currentQuiz)
-
-  // const [quizState, setQuizState] = useState<any>(
-  //   currentQuiz || { title: "", description: "", questions: [] }
-  // );
 
   const quizTitle = currentQuiz?.title || "";
   const description = currentQuiz?.description || "";
@@ -108,7 +103,7 @@ export default function QuizEditor() {
   };
 
   const handleUpdateQuestion = async (index: number, questionInfo: QuestionInfo) => {
-    const updatedQuizQuestions = (currentQuiz?.questions || []).map((value, i) =>
+    const updatedQuizQuestions = (currentQuiz?.questions || []).map((value: any, i: any) =>
       i === index ? { ...value, ...questionInfo } : value
     );
     await client.updateQuiz({ ...currentQuiz, questions: updatedQuizQuestions });
@@ -142,14 +137,6 @@ export default function QuizEditor() {
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedType(e.target.value);
   };
-
-  const handleDeleteQuestion = (index: number) => {
-    const updatedQuestions = quizState.questions.filter(
-      (_: any, i: number) => i !== index
-    );
-    // setQuizState((prev: any) => ({ ...prev, questions: updatedQuestions }));
-  };
-
 
   return (
     <div id="wd-quiz-editor">
@@ -423,7 +410,6 @@ export default function QuizEditor() {
               return (
                 <div key={question._id} className="mb-3 p-3 border rounded">
                   <div>
-                    hello
                     <Form.Group className="mb-2">
                       <Form.Label>Question Type</Form.Label>
                       <Form.Select

@@ -1,8 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import * as client from "./client";
 
 type Question = {
   id: string;
@@ -12,7 +11,6 @@ type Question = {
 };
 
 export default function QuizPreview() {
-  const navigate = useNavigate();
   const { quizId, cid, qid } = useParams();
   const [answers, setAnswers] = useState<{ [key: string]: string }>({});
   const [submitted, setSubmitted] = useState(false);

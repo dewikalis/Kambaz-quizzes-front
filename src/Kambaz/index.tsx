@@ -12,8 +12,16 @@ import Session from "./Account/Session";
 import * as userClient from "./Account/client";
 import * as courseClient from "./Courses/client";
 
+type Course = {
+  _id: any,
+  name: any,
+  number: any,
+  startDate: any,
+  endDate: any,
+  description: any,
+}
 export default function Kambaz() {
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [course, setCourse] = useState({
     _id: "1234",
@@ -40,7 +48,7 @@ export default function Kambaz() {
         currentUser._id
       );
       const courses = allCourses.map((course: any) => {
-        if (enrolledCourses.find((c) => c._id === course._id)) {
+        if (enrolledCourses.find((c: any) => c._id === course._id)) {
           return { ...course, enrolled: true };
         } else {
           return course;

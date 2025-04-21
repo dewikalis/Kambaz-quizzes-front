@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
 import { useParams, Link } from "react-router";
 import * as client from "./client"
 import { useDispatch, useSelector } from "react-redux";
 import { setQuizzes } from "./reducer";
-import { BsGripVertical, BsPlus } from "react-icons/bs";
-import { IoEllipsisVertical } from "react-icons/io5";
-
+import { BsGripVertical } from "react-icons/bs";
 
 const getAvailabilityStatus = (availableDate: string, dueDate: string) => {
   const currentDate = new Date();
