@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
-import { useParams, Link } from "react-router";
+import { useParams, Link, useNavigate } from "react-router";
 import * as client from "./client"
 import { useDispatch, useSelector } from "react-redux";
 import { setQuizzes } from "./reducer";
@@ -37,6 +37,7 @@ export default function Quizzes() {
   const { cid } = useParams();
   const dispatch = useDispatch();
   const { quizzes } = useSelector((state: any) => state.quizzesReducer)
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchQuizzes = async () => {
@@ -51,20 +52,22 @@ export default function Quizzes() {
   return (
     <div id="wd-quizzes" className="container mt-3">
       <div className="mb-3 d-flex justify-content-end">
-        <Link to={`/Kambaz/Courses/${cid}/Quizzes/New`}>
-          <Button
-            variant="danger"
-            size="lg"
-            className="me-1 float-end"
-            id="wd-add-module-btn"
-          >
-            <FaPlus
-              className="position-relative me-2"
-              style={{ bottom: "1px" }}
-            />
-            Quiz
-          </Button>
-        </Link>
+        <Button
+          variant="danger"
+          size="lg"
+          className="me-1 float-end"
+          id="wd-add-module-btn"
+          onClick={async () => {
+            const data = await client.saveQuiz({ course: cid })
+            navigate(`/Kambaz/Courses/${cid}/Quizzes/${data._id}`)
+          }}
+        >
+          <FaPlus
+            className="position-relative me-2"
+            style={{ bottom: "1px" }}
+          />
+          Quiz
+        </Button>
       </div>
 
 
@@ -79,30 +82,30 @@ export default function Quizzes() {
 
             <ListGroup className="wd-lessons rounded-0">
               {quizzes
-                .map((quizzes: any) => (
+                .map((quiz: any) => (
                   <ListGroup.Item
-                    key={quizzes._id}
+                    key={quiz._id}
                     className="wd-lesson p-3 ps-1 d-flex flex-row align-items-center"
                   >
                     <BsGripVertical className="me-2 fs-3 flex-shrink-0 mx-2" />
                     <div className="flex-grow-1">
                       <div className="mb-2">
                         <a
-                          href={`#/Kambaz/Courses/${cid}/Quizzes/${quizzes._id}/QuizDetails`}
+                          href={`#/Kambaz/Courses/${cid}/Quizzes/${quiz._id}/QuizDetails`}
                           className="wd-assignment-link text-decoration-none text-black"
                         >
-                          <strong>{quizzes.title}</strong>
+                          <strong>{quiz.title}</strong>
                         </a>
                       </div>
 
                       <div className="text-muted small">
                         <span >
-                          {getAvailabilityStatus(quizzes.from, quizzes.due)}
+                          {getAvailabilityStatus(quiz.from, quiz.due)}
                         </span>
                         <span >
                           {" "}
-                          | <b>Due </b> {formatDate(quizzes.due)} | {quizzes.points}
-                          pts | {quizzes.questions.length} Questions
+                          | <b>Due </b> {formatDate(quiz.due)} | {quiz.points}
+                          pts | {quiz.questions?.length} Questions
                         </span>
                       </div>
                     </div>

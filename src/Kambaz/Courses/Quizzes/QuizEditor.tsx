@@ -29,7 +29,6 @@ export default function QuizEditor() {
   const navigate = useNavigate();
 
   const currentQuiz = quizzes.find((quiz: any) => quiz._id === qid);
-  const [renderedOnce, setRenderedOnce] = useState(false);
 
   const quizTitle = currentQuiz?.title || "";
   const description = currentQuiz?.description || "";
@@ -52,15 +51,13 @@ export default function QuizEditor() {
 
   useEffect(() => {
     const fetchQuizzes = async () => {
-      if (renderedOnce) { return }
       const quizzes = await client.getQuizzes(cid!)
       dispatch(setQuizzes(quizzes));
-      setRenderedOnce(true);
     };
 
 
     fetchQuizzes();
-  }, [cid, dispatch, renderedOnce]);
+  }, [cid, dispatch]);
 
   const handleSave = async () => {
     const newQuiz = {
@@ -191,7 +188,6 @@ export default function QuizEditor() {
                 value={description}
                 onChange={(e) =>
                   dispatch(updateQuiz({ ...currentQuiz, description: e.target.value }))
-
                 }
                 placeholder="Enter quiz description"
               />
