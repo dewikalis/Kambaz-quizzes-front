@@ -32,6 +32,8 @@ export default function QuizPreview() {
   }, [questionsList]);
 
   const currentQuestion = quizQuestions[currentQIndex];
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY";
 
   useEffect(() => {
     const saved = localStorage.getItem(`quiz-preview-${quizId}`);
@@ -148,11 +150,13 @@ export default function QuizPreview() {
         </div>
       )}
 
+{isFaculty && (
       <div className="flex justify-end pt-6">
         <Link to={`/Kambaz/Courses/${cid}/Quizzes/QuizQuestions`}>
           <Button variant="secondary">Edit Quiz</Button>
         </Link>
       </div>
+)}
     </div>
   );
 }

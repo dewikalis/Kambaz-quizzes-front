@@ -11,6 +11,8 @@ const getAvailabilityStatus = (availableDate: string, dueDate: string) => {
   const currentDate = new Date();
   const availableDateObj = new Date(availableDate);
   const dueDateObj = new Date(dueDate);
+ 
+
 
   // If the current date is after the available date
   if (currentDate > availableDateObj) {
@@ -38,6 +40,8 @@ export default function Quizzes() {
   const dispatch = useDispatch();
   const { quizzes } = useSelector((state: any) => state.quizzesReducer)
   const navigate = useNavigate();
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const isFaculty = currentUser?.role === "FACULTY";
 
   useEffect(() => {
     const fetchQuizzes = async () => {
@@ -51,6 +55,7 @@ export default function Quizzes() {
 
   return (
     <div id="wd-quizzes" className="container mt-3">
+      {isFaculty && (
       <div className="mb-3 d-flex justify-content-end">
         <Button
           variant="danger"
@@ -69,7 +74,7 @@ export default function Quizzes() {
           Quiz
         </Button>
       </div>
-
+      )}
 
 
       <div id="wd-modules-controls" className="text-nowrap">

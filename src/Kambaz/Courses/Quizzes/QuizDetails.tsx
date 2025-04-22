@@ -60,7 +60,7 @@ export default function QuizDetails() {
 
       {isStudent && (
         <div className="d-flex justify-content-center mt-3">
-          <Link to="/Kambaz/Courses/Quizzes/QuizTaking/:qid">
+          <Link to={`/Kambaz/Courses/${cid}/Quizzes/${qid}/preview`}>
             <Button
               variant="danger"
               size="lg"
